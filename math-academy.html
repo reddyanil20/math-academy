@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathStar Academy — K-12 Math Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6C63FF;
+  --primary-dark: #4B44CC;
+  --secondary: #FF6584;
+  --accent: #43D9AD;
+  --gold: #FFD700;
+  --warn: #FF9F1C;
+  --bg: #F0F2FF;
+  --card: #FFFFFF;
+  --text: #1A1A2E;
+  --text2: #555577;
+  --text3: #8888AA;
+  --border: #E0E0F0;
+  --shadow: 0 4px 24px rgba(108,99,255,0.10);
+  --shadow-lg: 0 8px 40px rgba(108,99,255,0.18);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-head: 'Baloo 2', cursive;
+  --font-body: 'Nunito', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:#f0f0f8;}
+::-webkit-scrollbar-thumb{background:#c0b8ff;border-radius:3px;}
+
+/* ── SCREEN SYSTEM ── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ── TOP NAV ── */
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--card);border-bottom:1.5px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(108,99,255,0.06);}
+.logo{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:8px;}
+.logo-star{font-size:26px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-btn{background:none;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 14px;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s;}
+.nav-btn:hover{border-color:var(--primary);color:var(--primary);}
+.nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);}
+.nav-btn.primary:hover{background:var(--primary-dark);}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;cursor:pointer;}
+.lang-select{border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:var(--font-body);font-size:13px;color:var(--text2);background:var(--card);cursor:pointer;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#6C63FF 0%,#A78BFA 50%,#FF6584 100%);padding:60px 24px 80px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,0.08);}
+.hero::after{content:'';position:absolute;bottom:-60px;left:-30px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.hero h1{font-family:var(--font-head);font-size:42px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:12px;position:relative;}
+.hero p{font-size:17px;color:rgba(255,255,255,0.88);margin-bottom:32px;position:relative;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;}
+.hero-btn{padding:14px 32px;border-radius:50px;font-family:var(--font-head);font-size:16px;font-weight:700;cursor:pointer;border:none;transition:transform 0.15s,box-shadow 0.15s;}
+.hero-btn.white{background:#fff;color:var(--primary);}
+.hero-btn.white:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.hero-btn.outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.7);}
+.hero-btn.outline:hover{background:rgba(255,255,255,0.1);}
+.stars-row{display:flex;justify-content:center;gap:4px;margin-bottom:8px;}
+.hero-stat{color:rgba(255,255,255,0.9);font-size:13px;margin-bottom:28px;}
+
+/* ── SECTION ── */
+.section{padding:32px 24px;}
+.section-title{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.section-sub{font-size:14px;color:var(--text3);margin-bottom:20px;}
+
+/* ── CURRICULUM PILLS ── */
+.curriculum-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+.curr-pill{padding:9px 20px;border-radius:50px;border:2px solid var(--border);background:var(--card);font-family:var(--font-body);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.curr-pill:hover{border-color:var(--primary);color:var(--primary);}
+.curr-pill.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+/* ── GRADE BANDS ── */
+.grade-band{margin-bottom:28px;}
+.band-label{font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.grade-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;}
+.grade-tile{flex-shrink:0;width:80px;height:80px;border-radius:16px;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-family:var(--font-head);}
+.grade-tile:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.grade-tile .gn{font-size:22px;font-weight:800;}
+.grade-tile .gl{font-size:10px;font-weight:700;margin-top:2px;opacity:0.75;}
+.gt-k{background:#E8F5E9;color:#2E7D32;border-color:#A5D6A7;}
+.gt-elem{background:#E3F2FD;color:#1565C0;border-color:#90CAF9;}
+.gt-mid{background:#EDE7F6;color:#4527A0;border-color:#CE93D8;}
+.gt-high{background:#FFF3E0;color:#E65100;border-color:#FFB74D;}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:20px;box-shadow:var(--shadow);}
+.card-sm{background:var(--card);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:14px 16px;}
+
+/* ── TOPIC LIST ── */
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:500px){.topic-grid{grid-template-columns:1fr;}}
+.topic-tile{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;gap:4px;}
+.topic-tile:hover{border-color:var(--primary);box-shadow:var(--shadow);transform:translateY(-2px);}
+.topic-icon{font-size:26px;margin-bottom:4px;}
+.topic-name{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);}
+.topic-desc{font-size:12px;color:var(--text3);}
+.topic-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-top:4px;}
+.badge-new{background:#E8F5E9;color:#2E7D32;}
+.badge-hot{background:#FFEBEE;color:#C62828;}
+
+/* ── MODE SCREEN ── */
+.mode-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px 24px;}
+@media(max-width:480px){.mode-cards{grid-template-columns:1fr;}}
+.mode-tile{border-radius:var(--radius);padding:24px 16px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all 0.2s;}
+.mode-tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.mode-tile .m-icon{font-size:36px;margin-bottom:10px;}
+.mode-tile .m-name{font-family:var(--font-head);font-size:16px;font-weight:800;}
+.mode-tile .m-hint{font-size:12px;margin-top:4px;opacity:0.75;}
+.mt-learn{background:linear-gradient(135deg,#E8F5E9,#C8E6C9);border-color:#A5D6A7;color:#1B5E20;}
+.mt-practice{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);border-color:#90CAF9;color:#0D47A1;}
+.mt-test{background:linear-gradient(135deg,#FFF3E0,#FFE0B2);border-color:#FFB74D;color:#BF360C;}
+
+/* ── LEARN SCREEN ── */
+.learn-body{padding:20px 24px;flex:1;}
+.learn-concept{background:linear-gradient(135deg,#E8F5E9,#F1F8E9);border:1.5px solid #A5D6A7;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.learn-concept .lc-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#2E7D32;margin-bottom:8px;}
+.learn-concept .lc-body{font-size:15px;line-height:1.7;color:var(--text);}
+.learn-example{background:linear-gradient(135deg,#E3F2FD,#EDE7F6);border:1.5px solid #90CAF9;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.learn-example .le-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#1565C0;margin-bottom:8px;}
+.learn-tip{background:linear-gradient(135deg,#FFF8E1,#FFF3E0);border:1.5px solid #FFD54F;border-radius:var(--radius);padding:18px;margin-bottom:20px;}
+.learn-tip .lt-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#E65100;margin-bottom:8px;}
+
+/* ── QUIZ ── */
+.quiz-wrap{padding:20px 24px;flex:1;}
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.quiz-progress-text{font-size:13px;font-weight:700;color:var(--text2);}
+.quiz-score{font-size:13px;font-weight:700;color:var(--primary);}
+.progress-bar{height:8px;background:#E0E0F0;border-radius:4px;overflow:hidden;margin-bottom:20px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:4px;transition:width 0.4s ease;}
+.q-card{background:linear-gradient(135deg,#6C63FF,#A78BFA);border-radius:var(--radius);padding:28px 20px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
+.q-card::after{content:'?';position:absolute;right:-10px;bottom:-20px;font-size:120px;font-family:var(--font-head);font-weight:900;color:rgba(255,255,255,0.08);}
+.q-card .q-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+.q-card .q-text{font-family:var(--font-head);font-size:28px;font-weight:800;color:#fff;line-height:1.2;}
+.ans-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ans-btn{padding:16px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);background:var(--card);font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--text);cursor:pointer;transition:all 0.15s;text-align:center;}
+.ans-btn:hover:not(:disabled){border-color:var(--primary);background:#F0EEFF;color:var(--primary);}
+.ans-btn.correct{background:#E8F5E9;border-color:#4CAF50;color:#1B5E20;}
+.ans-btn.wrong{background:#FFEBEE;border-color:#F44336;color:#B71C1C;}
+.feedback{border-radius:var(--radius-sm);padding:14px;text-align:center;font-weight:700;font-size:14px;margin-bottom:12px;display:none;}
+.feedback.ok{background:#E8F5E9;color:#1B5E20;border:1.5px solid #A5D6A7;}
+.feedback.bad{background:#FFEBEE;color:#C62828;border:1.5px solid #EF9A9A;}
+.next-btn{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-family:var(--font-head);font-size:16px;font-weight:700;cursor:pointer;display:none;transition:transform 0.15s;}
+.next-btn:hover{transform:translateY(-1px);}
+
+/* ── RESULTS ── */
+.results-wrap{padding:32px 24px;flex:1;text-align:center;}
+.result-ring{width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;border:6px solid;}
+.result-ring.great{background:#E8F5E9;border-color:#4CAF50;}
+.result-ring.ok{background:#FFF8E1;border-color:#FFC107;}
+.result-ring.retry{background:#FFEBEE;border-color:#F44336;}
+.result-pct{font-family:var(--font-head);font-size:36px;font-weight:900;}
+.result-label{font-size:12px;font-weight:700;opacity:0.7;}
+.result-msg{font-family:var(--font-head);font-size:22px;font-weight:800;margin-bottom:6px;}
+.result-sub{font-size:14px;color:var(--text3);margin-bottom:28px;}
+.result-actions{display:flex;flex-direction:column;gap:10px;max-width:320px;margin:0 auto;}
+.r-btn{padding:14px;border-radius:50px;font-family:var(--font-head);font-size:15px;font-weight:700;cursor:pointer;border:2px solid var(--border);background:var(--card);color:var(--text);transition:all 0.2s;}
+.r-btn:hover{border-color:var(--primary);color:var(--primary);}
+.r-btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-color:transparent;}
+
+/* ── BACK BTN ── */
+.back-row{display:flex;align-items:center;gap:8px;padding:14px 24px 0;cursor:pointer;color:var(--text2);font-weight:700;font-size:14px;}
+.back-row:hover{color:var(--primary);}
+
+/* ── LOGIN ── */
+.login-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 24px;}
+.login-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:36px 32px;width:100%;max-width:400px;box-shadow:var(--shadow-lg);}
+.login-logo{text-align:center;margin-bottom:24px;}
+.login-logo .ll-name{font-family:var(--font-head);font-size:26px;font-weight:800;color:var(--primary);}
+.login-logo .ll-tag{font-size:13px;color:var(--text3);margin-top:4px;}
+.login-tabs{display:flex;background:#F0F2FF;border-radius:var(--radius-sm);padding:4px;margin-bottom:24px;}
+.lt-tab{flex:1;padding:9px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700;font-size:14px;color:var(--text3);transition:all 0.2s;}
+.lt-tab.active{background:var(--card);color:var(--primary);box-shadow:0 2px 8px rgba(108,99,255,0.15);}
+.role-row{display:flex;gap:8px;margin-bottom:20px;}
+.role-pill{flex:1;padding:10px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;cursor:pointer;font-size:13px;font-weight:700;transition:all 0.2s;color:var(--text2);}
+.role-pill.active{border-color:var(--primary);background:#F0EEFF;color:var(--primary);}
+.form-field{margin-bottom:14px;}
+.form-field label{display:block;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;}
+.form-field input,.form-field select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s;}
+.form-field input:focus,.form-field select:focus{border-color:var(--primary);}
+.form-submit{width:100%;padding:14px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-family:var(--font-head);font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:transform 0.15s;}
+.form-submit:hover{transform:translateY(-1px);}
+.login-footer{text-align:center;margin-top:16px;font-size:13px;color:var(--text3);}
+.login-footer a{color:var(--primary);font-weight:700;cursor:pointer;}
+
+/* ── LEADERBOARD ── */
+.lb-wrap{padding:20px 24px;flex:1;}
+.lb-podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:28px;}
+.podium-place{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.podium-avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-family:var(--font-head);}
+.podium-name{font-size:12px;font-weight:700;color:var(--text2);}
+.podium-score{font-size:11px;color:var(--text3);}
+.podium-bar{border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.place-1 .podium-avatar{width:56px;height:56px;font-size:20px;background:linear-gradient(135deg,#FFD700,#FFA000);}
+.place-2 .podium-avatar{width:44px;height:44px;font-size:16px;background:linear-gradient(135deg,#90A4AE,#546E7A);}
+.place-3 .podium-avatar{width:40px;height:40px;font-size:14px;background:linear-gradient(135deg,#FFAB91,#D84315);}
+.place-1 .podium-bar{background:linear-gradient(180deg,#FFD700,#FFA000);height:80px;width:80px;}
+.place-2 .podium-bar{background:linear-gradient(180deg,#B0BEC5,#78909C);height:60px;width:70px;}
+.place-3 .podium-bar{background:linear-gradient(180deg,#FFAB91,#BF360C);height:44px;width:70px;}
+.lb-list{display:flex;flex-direction:column;gap:8px;}
+.lb-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;}
+.lb-rank{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--text3);min-width:28px;}
+.lb-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:13px;}
+.lb-info{flex:1;}
+.lb-uname{font-weight:700;font-size:14px;color:var(--text);}
+.lb-grade{font-size:12px;color:var(--text3);}
+.lb-pts{font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--primary);}
+.lb-badge{font-size:18px;}
+
+/* ── PARENT DASHBOARD ── */
+.parent-wrap{padding:20px 24px;flex:1;}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;}
+.stat-val{font-family:var(--font-head);font-size:28px;font-weight:900;color:var(--primary);}
+.stat-lbl{font-size:12px;font-weight:700;color:var(--text3);margin-top:2px;}
+.child-tab-row{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;}
+.child-tab{padding:8px 16px;border-radius:50px;border:1.5px solid var(--border);background:var(--card);font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+.child-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.activity-list{display:flex;flex-direction:column;gap:8px;}
+.activity-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;}
+.act-icon{font-size:22px;}
+.act-info{flex:1;}
+.act-topic{font-weight:700;font-size:14px;}
+.act-detail{font-size:12px;color:var(--text3);}
+.act-score{font-family:var(--font-head);font-weight:800;font-size:15px;}
+.act-score.hi{color:#2E7D32;}
+.act-score.mid{color:#E65100;}
+.act-score.lo{color:#C62828;}
+.progress-topic{margin-bottom:12px;}
+.pt-header{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px;}
+.pt-bar{height:10px;background:#E0E0F0;border-radius:5px;overflow:hidden;}
+.pt-fill{height:100%;border-radius:5px;}
+
+/* ── UTILITY ── */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.full-btn{width:100%;padding:15px;border:none;border-radius:50px;font-family:var(--font-head);font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.full-btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;}
+.full-btn.primary:hover{transform:translateY(-1px);}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.tag-curr{background:#E3F2FD;color:#1565C0;}
+.streaks-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.streak-day{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.streak-done{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;}
+.streak-miss{background:#E0E0F0;color:var(--text3);}
+.streak-today{background:linear-gradient(135deg,var(--gold),#FF9F1C);color:#fff;}
+
+/* ── TIMER ── */
+.timer-wrap{display:none;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;}
+.timer-wrap.visible{display:flex;}
+.timer-ring-svg{transform:rotate(-90deg);}
+.timer-ring-bg{fill:none;stroke:#E0E0F0;stroke-width:5;}
+.timer-ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke 0.5s;}
+.timer-digits{font-family:var(--font-head);font-size:18px;font-weight:900;min-width:36px;text-align:center;}
+.timer-label{font-size:12px;font-weight:700;color:var(--text3);}
+.timer-urgent .timer-ring-fill{stroke:#F44336!important;}
+.timer-urgent .timer-digits{color:#F44336;}
+.timer-ok .timer-ring-fill{stroke:#6C63FF;}
+.timer-ok .timer-digits{color:#6C63FF;}
+.timer-warn .timer-ring-fill{stroke:#FF9F1C!important;}
+.timer-warn .timer-digits{color:#FF9F1C;}
+
+/* ── AUDIO BUTTON ── */
+.speak-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid var(--border);border-radius:50px;background:var(--card);font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all 0.2s;margin-top:8px;}
+.speak-btn:hover{border-color:var(--primary);color:var(--primary);background:#F0EEFF;}
+.speak-btn.speaking{border-color:var(--accent);color:var(--accent);background:#E8FFF9;}
+.speak-btn svg{width:16px;height:16px;}
+.audio-bar{display:flex;align-items:flex-end;gap:2px;height:16px;}
+.audio-bar span{width:3px;border-radius:2px;background:currentColor;animation:audio-wave 0.6s ease-in-out infinite alternate;}
+.audio-bar span:nth-child(1){height:4px;animation-delay:0s;}
+.audio-bar span:nth-child(2){height:10px;animation-delay:0.1s;}
+.audio-bar span:nth-child(3){height:7px;animation-delay:0.2s;}
+.audio-bar span:nth-child(4){height:13px;animation-delay:0.05s;}
+.audio-bar span:nth-child(5){height:5px;animation-delay:0.15s;}
+@keyframes audio-wave{from{transform:scaleY(0.4);}to{transform:scaleY(1);}}
+
+/* ── LEARN AUDIO ── */
+.learn-speak-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.learn-speak-hint{font-size:12px;color:var(--text3);}
+
+/* ── TIME'S UP OVERLAY ── */
+.timesup-overlay{position:fixed;inset:0;background:rgba(244,67,54,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;animation:pop 0.3s ease;}
+.timesup-overlay h2{font-family:var(--font-head);font-size:48px;font-weight:900;color:#fff;margin-bottom:8px;}
+.timesup-overlay p{font-size:18px;color:rgba(255,255,255,0.85);margin-bottom:28px;}
+.timesup-overlay button{padding:14px 36px;border-radius:50px;font-family:var(--font-head);font-size:16px;font-weight:700;background:#fff;color:#F44336;border:none;cursor:pointer;}
+
+/* ── ANIMATIONS ── */
+@keyframes pop{0%{transform:scale(0.8);opacity:0;}60%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+@keyframes slide-up{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.animate-pop{animation:pop 0.35s ease both;}
+.animate-slide{animation:slide-up 0.3s ease both;}
+
+/* ── CONFETTI ── */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+.confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════ HOME ════════════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right">
+      <select class="lang-select" id="lang-select" onchange="setLang(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिंदी</option>
+        <option value="te">🇮🇳 తెలుగు</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+      <button class="nav-btn" onclick="showScreen('screen-leaderboard')" id="nav-lb">🏆 Board</button>
+      <button class="nav-btn primary" onclick="showScreen('screen-login')" id="nav-login">Sign In</button>
+      <div class="avatar" id="nav-avatar" style="display:none" onclick="toggleUserMenu()">A</div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="stars-row">⭐⭐⭐⭐⭐</div>
+    <div class="hero-stat" id="hero-stat">Trusted by 50,000+ students worldwide</div>
+    <h1 id="hero-title">Learn Math the<br>Fun Way! 🚀</h1>
+    <p id="hero-sub">K–12 curriculum from USA, India, Ireland & Europe.<br>Learn · Practice · Test · Grow.</p>
+    <div class="hero-btns">
+      <button class="hero-btn white" onclick="showScreen('screen-login')" id="hero-start">Start Learning Free</button>
+      <button class="hero-btn outline" onclick="showScreen('screen-leaderboard')" id="hero-lb">View Leaderboard</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="sec-curr-title">Choose Your Curriculum</div>
+    <div class="section-sub" id="sec-curr-sub">Select the education system that matches your school</div>
+    <div class="curriculum-row" id="curriculum-row">
+      <button class="curr-pill active" onclick="selectCurriculum('usa',this)">🇺🇸 USA (Common Core)</button>
+      <button class="curr-pill" onclick="selectCurriculum('india',this)">🇮🇳 India (NCERT/CBSE)</button>
+      <button class="curr-pill" onclick="selectCurriculum('ireland',this)">🇮🇪 Ireland (Junior/Leaving Cert)</button>
+      <button class="curr-pill" onclick="selectCurriculum('europe',this)">🇪🇺 Europe (IB/Cambridge)</button>
+    </div>
+
+    <div class="grade-band"><div class="band-label" id="band-early">🌱 Early Learning</div><div class="grade-scroll" id="grid-early"></div></div>
+    <div class="grade-band"><div class="band-label" id="band-elem">📚 Elementary School</div><div class="grade-scroll" id="grid-elem"></div></div>
+    <div class="grade-band"><div class="band-label" id="band-mid">🔬 Middle School</div><div class="grade-scroll" id="grid-mid"></div></div>
+    <div class="grade-band"><div class="band-label" id="band-high">🎓 High School</div><div class="grade-scroll" id="grid-high"></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ LOGIN ════════════════════════════════════ -->
+<div class="screen" id="screen-login">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right"><button class="nav-btn" onclick="showScreen('screen-home')">← Back</button></div>
+  </nav>
+  <div class="login-wrap">
+    <div class="login-card animate-pop">
+      <div class="login-logo">
+        <div style="font-size:42px;margin-bottom:8px;">⭐</div>
+        <div class="ll-name">MathStar Academy</div>
+        <div class="ll-tag" id="login-tagline">Your journey to math mastery starts here</div>
+      </div>
+      <div class="login-tabs">
+        <div class="lt-tab active" id="tab-signin" onclick="switchLoginTab('signin')" data-i18n="sign_in">Sign In</div>
+        <div class="lt-tab" id="tab-signup" onclick="switchLoginTab('signup')" data-i18n="sign_up">Sign Up</div>
+      </div>
+      <div id="login-form-signin">
+        <div class="form-field">
+          <label data-i18n="email">Email / Username</label>
+          <input type="text" id="si-user" placeholder="Enter your email">
+        </div>
+        <div class="form-field">
+          <label data-i18n="password">Password</label>
+          <input type="password" id="si-pass" placeholder="Enter your password">
+        </div>
+        <button class="form-submit" onclick="doLogin()" data-i18n="sign_in">Sign In</button>
+        <p class="login-footer">Demo: student@math.com / parent@math.com (any password)</p>
+      </div>
+      <div id="login-form-signup" style="display:none">
+        <div class="form-field"><label data-i18n="your_name">Full Name</label><input type="text" id="su-name" placeholder="Your name"></div>
+        <div class="form-field"><label data-i18n="email">Email</label><input type="text" id="su-email" placeholder="Email address"></div>
+        <div class="form-field"><label data-i18n="password">Password</label><input type="password" id="su-pass" placeholder="Create password"></div>
+        <div class="form-field"><label data-i18n="role">I am a...</label>
+          <div class="role-row">
+            <div class="role-pill active" id="role-student" onclick="selectRole('student')">🧑‍🎓 Student</div>
+            <div class="role-pill" id="role-parent" onclick="selectRole('parent')">👨‍👩‍👧 Parent</div>
+            <div class="role-pill" id="role-teacher" onclick="selectRole('teacher')">👩‍🏫 Teacher</div>
+          </div>
+        </div>
+        <div class="form-field" id="grade-field">
+          <label data-i18n="grade">Grade Level</label>
+          <select id="su-grade"><option value="K">Kindergarten</option><option value="1">Grade 1</option><option value="2">Grade 2</option><option value="3">Grade 3</option><option value="4">Grade 4</option><option value="5">Grade 5</option><option value="6">Grade 6</option><option value="7">Grade 7</option><option value="8">Grade 8</option><option value="9">Grade 9</option><option value="10">Grade 10</option><option value="11">Grade 11</option><option value="12">Grade 12</option></select>
+        </div>
+        <button class="form-submit" onclick="doSignup()" data-i18n="create_account">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ TOPICS ════════════════════════════════════ -->
+<div class="screen" id="screen-topics">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right">
+      <select class="lang-select" onchange="setLang(this.value)" id="lang-select2"></select>
+      <div class="avatar" id="topic-avatar">A</div>
+    </div>
+  </nav>
+  <div class="back-row" onclick="showScreen('screen-home')">← <span id="topics-back-lbl">Back to Grades</span></div>
+  <div class="section">
+    <div class="section-title" id="topics-grade-title">Grade 3 Topics</div>
+    <div class="section-sub" id="topics-curr-badge"></div>
+    <div class="topic-grid" id="topic-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ MODE SELECT ════════════════════════════════════ -->
+<div class="screen" id="screen-mode">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right"><div class="avatar" id="mode-avatar">A</div></div>
+  </nav>
+  <div class="back-row" onclick="showScreen('screen-topics')">← <span id="mode-back-lbl">Back to Topics</span></div>
+  <div class="section">
+    <div class="section-title" id="mode-topic-title"></div>
+    <div class="section-sub" id="mode-sub-lbl">How do you want to study today?</div>
+  </div>
+  <div class="mode-cards">
+    <div class="mode-tile mt-learn" onclick="startLearn()">
+      <div class="m-icon">📖</div>
+      <div class="m-name" id="mode-learn-lbl">Learn</div>
+      <div class="m-hint" id="mode-learn-hint">Concepts & examples</div>
+    </div>
+    <div class="mode-tile mt-practice" onclick="startQuiz('practice')">
+      <div class="m-icon">✏️</div>
+      <div class="m-name" id="mode-practice-lbl">Practice</div>
+      <div class="m-hint" id="mode-practice-hint">Unlimited problems</div>
+    </div>
+    <div class="mode-tile mt-test" onclick="startQuiz('test')">
+      <div class="m-icon">📝</div>
+      <div class="m-name" id="mode-test-lbl">Test</div>
+      <div class="m-hint" id="mode-test-hint">10 questions · 30s timer</div>
+    </div>
+  </div>
+
+  <!-- Streak widget -->
+  <div class="section" style="padding-top:0;">
+    <div class="card-sm">
+      <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px;">🔥 Weekly Streak</div>
+      <div class="streaks-row" id="streak-row"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ LEARN ════════════════════════════════════ -->
+<div class="screen" id="screen-learn">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right"><div class="avatar" id="learn-avatar">A</div></div>
+  </nav>
+  <div class="back-row" onclick="showScreen('screen-mode')">← Back</div>
+  <div class="learn-body">
+    <div class="section-title" id="learn-title" style="margin-bottom:8px;"></div>
+    <div class="learn-speak-row">
+      <button class="speak-btn" id="speak-learn-btn" onclick="speakLearnContent()" title="Listen to this lesson">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        Listen to Lesson
+      </button>
+      <span class="learn-speak-hint">🔊 Tap to hear the concept explained</span>
+    </div>
+    <div id="learn-content"></div>
+    <button class="full-btn primary" style="margin-top:8px;" onclick="startQuiz('practice')">Try Practice Problems →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ QUIZ ════════════════════════════════════ -->
+<div class="screen" id="screen-quiz">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right">
+      <span id="quiz-mode-badge" style="font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;background:#E3F2FD;color:#1565C0;">Practice</span>
+    </div>
+  </nav>
+  <div class="back-row" onclick="quitQuiz()">← Back</div>
+  <div class="quiz-wrap">
+    <div class="quiz-header">
+      <div class="quiz-progress-text" id="q-prog-text">Question 1 of 10</div>
+      <div class="quiz-score" id="q-score-text">Score: 0</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="q-prog-fill" style="width:0%"></div></div>
+
+    <!-- TIMER (test mode only) -->
+    <div class="timer-wrap timer-ok" id="timer-wrap">
+      <svg class="timer-ring-svg" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="timer-ring-bg" cx="26" cy="26" r="21"/>
+        <circle class="timer-ring-fill" id="timer-ring-fill" cx="26" cy="26" r="21"
+          stroke="#6C63FF" stroke-dasharray="132" stroke-dashoffset="0"/>
+      </svg>
+      <div>
+        <div class="timer-digits" id="timer-digits">30</div>
+        <div class="timer-label">seconds</div>
+      </div>
+    </div>
+
+    <div class="q-card animate-pop">
+      <div class="q-label" id="q-label">Question</div>
+      <div class="q-text" id="q-text">Loading...</div>
+      <button class="speak-btn" id="speak-q-btn" onclick="speakQuestion()" title="Read question aloud">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <span id="speak-q-label">Read Question</span>
+      </button>
+    </div>
+    <div class="ans-grid" id="ans-grid"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQ()">Next Question →</button>
+  </div>
+</div>
+
+<!-- TIME'S UP OVERLAY -->
+<div class="timesup-overlay" id="timesup-overlay" style="display:none">
+  <div style="font-size:64px;margin-bottom:8px;">⏰</div>
+  <h2>Time's Up!</h2>
+  <p>You answered <strong id="timesup-answered">0</strong> of 10 questions</p>
+  <button onclick="dismissTimesUp()">See Results</button>
+</div>
+
+<!-- ════════════════════════════════════ RESULTS ════════════════════════════════════ -->
+<div class="screen" id="screen-results">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+  </nav>
+  <div class="results-wrap animate-slide">
+    <div class="result-ring" id="res-ring"><div class="result-pct" id="res-pct">0%</div><div class="result-label">Score</div></div>
+    <div class="result-msg" id="res-msg">Great job!</div>
+    <div class="result-sub" id="res-sub">You completed the test.</div>
+    <div id="res-time-row" style="display:none;font-size:13px;color:var(--text3);margin-bottom:20px;font-weight:700;">⏱ Time used: <span id="res-time-val">0s</span></div>
+    <div class="result-actions">
+      <button class="r-btn primary" onclick="startQuiz(currentMode)">Try Again 🔄</button>
+      <button class="r-btn" onclick="showScreen('screen-mode')">Different Mode</button>
+      <button class="r-btn" onclick="showScreen('screen-home')">Pick New Topic 🏠</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ LEADERBOARD ════════════════════════════════════ -->
+<div class="screen" id="screen-leaderboard">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right"><button class="nav-btn" onclick="showScreen('screen-home')">← Back</button></div>
+  </nav>
+  <div class="lb-wrap">
+    <div class="section-title" style="margin-bottom:4px;">🏆 Leaderboard</div>
+    <div class="section-sub" style="margin-bottom:20px;">Top students this month</div>
+    <div class="lb-podium" id="lb-podium"></div>
+    <div class="lb-list" id="lb-list"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ PARENT DASHBOARD ════════════════════════════════════ -->
+<div class="screen" id="screen-parent">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="showScreen('screen-home')">🏠 Home</button>
+      <button class="nav-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </nav>
+  <div class="parent-wrap">
+    <div class="section-title" style="margin-bottom:4px;">👨‍👩‍👧 Parent Dashboard</div>
+    <div class="section-sub" style="margin-bottom:16px;">Track your child's math progress</div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-val">14</div><div class="stat-lbl">Topics Completed</div></div>
+      <div class="stat-card"><div class="stat-val">78%</div><div class="stat-lbl">Avg Score</div></div>
+      <div class="stat-card"><div class="stat-val">🔥 7</div><div class="stat-lbl">Day Streak</div></div>
+      <div class="stat-card"><div class="stat-val">2.4h</div><div class="stat-lbl">This Week</div></div>
+    </div>
+
+    <div class="child-tab-row" id="child-tabs">
+      <div class="child-tab active">Arjun (Grade 5)</div>
+      <div class="child-tab">Priya (Grade 3)</div>
+      <div class="child-tab">+ Add Child</div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-weight:800;font-size:15px;margin-bottom:12px;">📈 Progress by Topic</div>
+      <div class="progress-topic"><div class="pt-header"><span>Fractions</span><span style="color:#2E7D32">92%</span></div><div class="pt-bar"><div class="pt-fill" style="width:92%;background:linear-gradient(90deg,#4CAF50,#8BC34A);"></div></div></div>
+      <div class="progress-topic"><div class="pt-header"><span>Multiplication</span><span style="color:#2E7D32">85%</span></div><div class="pt-bar"><div class="pt-fill" style="width:85%;background:linear-gradient(90deg,#4CAF50,#8BC34A);"></div></div></div>
+      <div class="progress-topic"><div class="pt-header"><span>Geometry</span><span style="color:#E65100">64%</span></div><div class="pt-bar"><div class="pt-fill" style="width:64%;background:linear-gradient(90deg,#FF9800,#FFC107);"></div></div></div>
+      <div class="progress-topic"><div class="pt-header"><span>Division</span><span style="color:#C62828">48%</span></div><div class="pt-bar"><div class="pt-fill" style="width:48%;background:linear-gradient(90deg,#F44336,#FF7043);"></div></div></div>
+      <div class="progress-topic"><div class="pt-header"><span>Word Problems</span><span style="color:#E65100">71%</span></div><div class="pt-bar"><div class="pt-fill" style="width:71%;background:linear-gradient(90deg,#FF9800,#FFC107);"></div></div></div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:800;font-size:15px;margin-bottom:12px;">📋 Recent Activity</div>
+      <div class="activity-list" id="activity-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFETTI -->
+<div class="confetti-container" id="confetti" style="display:none"></div>
+
+<script>
+// ═══════════════════ I18N ═══════════════════
+const LANGS = {
+  en:{
+    hero_title:"Learn Math the<br>Fun Way! 🚀",hero_sub:"K–12 curriculum from USA, India, Ireland & Europe.<br>Learn · Practice · Test · Grow.",
+    start:"Start Learning Free",leaderboard:"View Leaderboard",curr_title:"Choose Your Curriculum",
+    curr_sub:"Select the education system that matches your school",sign_in:"Sign In",sign_up:"Sign Up",
+    email:"Email / Username",password:"Password",your_name:"Full Name",role:"I am a...",grade:"Grade Level",
+    create_account:"Create Account",learn:"Learn",practice:"Practice",test:"Test",
+    learn_hint:"Concepts & examples",practice_hint:"Unlimited problems",test_hint:"10 questions, graded",
+    topics_back:"Back to Grades",mode_back:"Back to Topics",next_q:"Next Question →",
+    try_again:"Try Again 🔄",diff_mode:"Different Mode",new_topic:"Pick New Topic 🏠",
+    tagline:"Your journey to math mastery starts here",
+    trusted:"Trusted by 50,000+ students worldwide",
+    band_early:"🌱 Early Learning",band_elem:"📚 Elementary School",band_mid:"🔬 Middle School",band_high:"🎓 High School"
+  },
+  hi:{
+    hero_title:"गणित सीखें मजेदार तरीके से! 🚀",hero_sub:"K–12 पाठ्यक्रम — USA, भारत, Ireland और Europe।<br>सीखें · अभ्यास · परीक्षा · आगे बढ़ें।",
+    start:"मुफ्त में शुरू करें",leaderboard:"लीडरबोर्ड देखें",curr_title:"अपना पाठ्यक्रम चुनें",
+    curr_sub:"वह शिक्षा प्रणाली चुनें जो आपके स्कूल से मेल खाती है",sign_in:"साइन इन",sign_up:"साइन अप",
+    email:"ईमेल / उपयोगकर्ता नाम",password:"पासवर्ड",your_name:"पूरा नाम",role:"मैं हूँ...",grade:"कक्षा",
+    create_account:"खाता बनाएं",learn:"सीखें",practice:"अभ्यास",test:"परीक्षा",
+    learn_hint:"अवधारणाएं और उदाहरण",practice_hint:"असीमित समस्याएं",test_hint:"10 प्रश्न, ग्रेडेड",
+    topics_back:"कक्षाओं पर वापस",mode_back:"विषयों पर वापस",next_q:"अगला प्रश्न →",
+    try_again:"फिर कोशिश करें 🔄",diff_mode:"अलग मोड",new_topic:"नया विषय चुनें 🏠",
+    tagline:"गणित में महारत की आपकी यात्रा यहाँ से शुरू होती है",
+    trusted:"50,000+ छात्रों द्वारा भरोसेमंद",
+    band_early:"🌱 प्रारंभिक शिक्षा",band_elem:"📚 प्राथमिक विद्यालय",band_mid:"🔬 मध्य विद्यालय",band_high:"🎓 हाई स्कूल"
+  },
+  te:{
+    hero_title:"గణితాన్ని సరదాగా నేర్చుకోండి! 🚀",hero_sub:"K–12 పాఠ్యప్రణాళిక — USA, భారతదేశం, Ireland & Europe.<br>నేర్చుకోండి · సాధన · పరీక్ష · అభివృద్ధి.",
+    start:"ఉచితంగా ప్రారంభించండి",leaderboard:"లీడర్‌బోర్డ్ చూడండి",curr_title:"మీ పాఠ్యప్రణాళికను ఎంచుకోండి",
+    curr_sub:"మీ పాఠశాలకు సరిపోయే విద్యా వ్యవస్థను ఎంచుకోండి",sign_in:"సైన్ ఇన్",sign_up:"సైన్ అప్",
+    email:"ఇమెయిల్ / వినియోగదారు పేరు",password:"పాస్‌వర్డ్",your_name:"పూర్తి పేరు",role:"నేను...",grade:"తరగతి",
+    create_account:"ఖాతా సృష్టించండి",learn:"నేర్చుకోండి",practice:"సాధన",test:"పరీక్ష",
+    learn_hint:"భావనలు & ఉదాహరణలు",practice_hint:"అపరిమిత సమస్యలు",test_hint:"10 ప్రశ్నలు, గ్రేడ్",
+    topics_back:"తరగతులకు తిరిగి",mode_back:"అంశాలకు తిరిగి",next_q:"తదుపరి ప్రశ్న →",
+    try_again:"మళ్ళీ ప్రయత్నించండి 🔄",diff_mode:"వేరే మోడ్",new_topic:"కొత్త అంశం ఎంచుకోండి 🏠",
+    tagline:"గణితంలో నైపుణ్యానికి మీ ప్రయాణం ఇక్కడ ప్రారంభమవుతుంది",
+    trusted:"50,000+ విద్యార్థులు నమ్మకపాత్రం",
+    band_early:"🌱 ప్రారంభ అభ్యాసం",band_elem:"📚 ప్రాథమిక పాఠశాల",band_mid:"🔬 మాధ్యమిక పాఠశాల",band_high:"🎓 హైస్కూల్"
+  },
+  fr:{
+    hero_title:"Apprends les Maths<br>en s'amusant! 🚀",hero_sub:"Programme K–12 — USA, Inde, Irlande & Europe.<br>Apprendre · Pratiquer · Tester · Progresser.",
+    start:"Commencer Gratuitement",leaderboard:"Voir le Classement",curr_title:"Choisissez votre Programme",
+    curr_sub:"Sélectionnez le système éducatif de votre école",sign_in:"Se Connecter",sign_up:"S'inscrire",
+    email:"Email / Nom d'utilisateur",password:"Mot de passe",your_name:"Nom complet",role:"Je suis...",grade:"Niveau scolaire",
+    create_account:"Créer un Compte",learn:"Apprendre",practice:"S'entraîner",test:"Tester",
+    learn_hint:"Concepts & exemples",practice_hint:"Exercices illimités",test_hint:"10 questions notées",
+    topics_back:"Retour aux niveaux",mode_back:"Retour aux sujets",next_q:"Question suivante →",
+    try_again:"Réessayer 🔄",diff_mode:"Autre mode",new_topic:"Choisir un autre sujet 🏠",
+    tagline:"Votre voyage vers la maîtrise des maths commence ici",
+    trusted:"Utilisé par 50 000+ élèves dans le monde",
+    band_early:"🌱 Petite Section",band_elem:"📚 École Primaire",band_mid:"🔬 Collège",band_high:"🎓 Lycée"
+  },
+  es:{
+    hero_title:"¡Aprende Matemáticas<br>de Forma Divertida! 🚀",hero_sub:"Currículo K–12 — EEUU, India, Irlanda y Europa.<br>Aprende · Practica · Examínate · Crece.",
+    start:"Comenzar Gratis",leaderboard:"Ver Clasificación",curr_title:"Elige tu Plan de Estudios",
+    curr_sub:"Selecciona el sistema educativo de tu escuela",sign_in:"Iniciar Sesión",sign_up:"Registrarse",
+    email:"Correo / Nombre de usuario",password:"Contraseña",your_name:"Nombre completo",role:"Soy...",grade:"Nivel escolar",
+    create_account:"Crear Cuenta",learn:"Aprender",practice:"Practicar",test:"Examen",
+    learn_hint:"Conceptos y ejemplos",practice_hint:"Problemas ilimitados",test_hint:"10 preguntas calificadas",
+    topics_back:"Volver a cursos",mode_back:"Volver a temas",next_q:"Siguiente pregunta →",
+    try_again:"Intentar de nuevo 🔄",diff_mode:"Otro modo",new_topic:"Elegir nuevo tema 🏠",
+    tagline:"Tu viaje hacia el dominio de las matemáticas comienza aquí",
+    trusted:"Utilizado por más de 50.000 estudiantes",
+    band_early:"🌱 Educación Inicial",band_elem:"📚 Escuela Primaria",band_mid:"🔬 Secundaria",band_high:"🎓 Bachillerato"
+  }
+};
+let LANG = 'en';
+function t(k){ return (LANGS[LANG]||LANGS.en)[k]||k; }
+function setLang(l){
+  LANG=l;
+  document.querySelectorAll('[id="lang-select"],[id="lang-select2"]').forEach(s=>s.value=l);
+  applyLang();
+}
+function applyLang(){
+  const L=LANGS[LANG]||LANGS.en;
+  const set=(id,html)=>{const el=document.getElementById(id);if(el)el.innerHTML=html;};
+  set('hero-title',L.hero_title); set('hero-sub',L.hero_sub); set('hero-stat',L.trusted);
+  set('sec-curr-title',L.curr_title); set('sec-curr-sub',L.curr_sub);
+  set('band-early',L.band_early); set('band-elem',L.band_elem);
+  set('band-mid',L.band_mid); set('band-high',L.band_high);
+  ['hero-start','hero-lb','nav-login','nav-lb'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=[L.start,L.leaderboard,'Sign In','🏆 Board'][i];
+  });
+  const ml=document.getElementById('mode-learn-lbl'); if(ml)ml.textContent=L.learn;
+  const mp=document.getElementById('mode-practice-lbl'); if(mp)mp.textContent=L.practice;
+  const mt=document.getElementById('mode-test-lbl'); if(mt)mt.textContent=L.test;
+  const mh1=document.getElementById('mode-learn-hint'); if(mh1)mh1.textContent=L.learn_hint;
+  const mh2=document.getElementById('mode-practice-hint'); if(mh2)mh2.textContent=L.practice_hint;
+  const mh3=document.getElementById('mode-test-hint'); if(mh3)mh3.textContent=L.test_hint;
+  const tb=document.getElementById('topics-back-lbl'); if(tb)tb.textContent=L.topics_back;
+  const mb=document.getElementById('mode-back-lbl'); if(mb)mb.textContent=L.mode_back;
+  const lt=document.getElementById('login-tagline'); if(lt)lt.textContent=L.tagline;
+}
+
+// ═══════════════════ CURRICULUM DATA ═══════════════════
+const CURR_LABELS = {
+  usa: '🇺🇸 USA Common Core',
+  india: '🇮🇳 India NCERT/CBSE',
+  ireland: '🇮🇪 Ireland Nat. Curriculum',
+  europe: '🇪🇺 Europe IB/Cambridge'
+};
+let activeCurriculum = 'usa';
+
+const TOPICS_DB = {
+  // KINDERGARTEN
+  'K': {
+    usa:[
+      {icon:'🔢',name:'Counting to 20',desc:'Count objects up to 20',learn:{concept:'We count by saying numbers in order. Touch each object once as you count.',example:'Count the stars: ⭐⭐⭐⭐⭐ = 5 stars!',tip:'Always start from 1 and go in order!'},gen:()=>{const n=rand(1,10);return{q:`How many: ${'🌟'.repeat(n)}`,a:n,w:[n-1<1?2:n-1,n+1,n+2]}}},
+      {icon:'➕',name:'Basic Addition',desc:'Adding numbers 0–10',learn:{concept:'Addition puts groups together. Use + sign.',example:'3 🍎 + 2 🍎 = 5 🍎',tip:'Count on fingers!'},gen:()=>{const a=rand(1,5),b=rand(1,5);return{q:`${a} + ${b} = ?`,a:a+b,w:[a+b+1,a+b-1,a+b+2]}}},
+      {icon:'➖',name:'Basic Subtraction',desc:'Taking away up to 10',learn:{concept:'Subtraction takes away. The − sign means "take away."',example:'5 🍪 − 2 🍪 = 3 🍪',tip:'Count backwards to subtract!'},gen:()=>{const a=rand(3,9),b=rand(1,a-1);return{q:`${a} − ${b} = ?`,a:a-b,w:[a-b+1,a-b-1,a+b]}}},
+      {icon:'🔷',name:'2D Shapes',desc:'Circles, squares, triangles',learn:{concept:'Shapes have different numbers of sides and corners.',example:'Circle=0 sides ⭕  Square=4 sides 🟦  Triangle=3 sides 🔺',tip:'Count corners to name a shape!'},gen:()=>{const sh=[['circle',0],['square',4],['triangle',3],['rectangle',4],['pentagon',5]];const s=sh[rand(0,4)];return{q:`How many sides does a ${s[0]} have?`,a:s[1],w:[s[1]+1,s[1]+2,s[1]===0?3:s[1]-1]}}},
+      {icon:'📏',name:'Comparing Numbers',desc:'Greater, less, equal',learn:{concept:'We compare numbers to see which is bigger.',example:'5 > 3 (5 is greater)  2 < 7 (2 is less)',tip:'Imagine the > like a hungry mouth eating the bigger number!'},gen:()=>{const a=rand(1,9),b=rand(1,9);const ans=a>b?'greater':a<b?'less':'equal';return{q:`${a} is ___ than ${b}`,a:ans,w:['greater','less','equal'].filter(x=>x!==ans).concat(['equal']).slice(0,3)}}},
+      {icon:'📐',name:'Measurement Basics',desc:'Long, short, heavy, light',learn:{concept:'We measure to compare sizes. We use units like inches and pounds.',example:'A pencil is shorter than a ruler.',tip:'Use your hand to estimate length!'},gen:()=>{const a=rand(2,9),b=rand(a+1,a+5);return{q:`Which is longer: ${a} inches or ${b} inches?`,a:b,w:[a,a+b,b-1]}}}
+    ],
+    india:[
+      {icon:'🔢',name:'Numbers 1–50',desc:'Counting and recognising',learn:{concept:'In India we learn numbers up to 50 in Kindergarten. Count objects carefully.',example:'10, 20, 30, 40, 50 — count in tens!',tip:'Write each number as you say it.'},gen:()=>{const n=rand(1,20);return{q:`What comes after ${n}?`,a:n+1,w:[n,n+2,n-1]}}},
+      {icon:'➕',name:'Simple Addition',desc:'Addition up to 20',learn:{concept:'जोड़ना — Adding objects together to get a total.',example:'5 + 3 = 8',tip:'Draw dots to help you add!'},gen:()=>{const a=rand(1,9),b=rand(1,9);return{q:`${a} + ${b} = ?`,a:a+b,w:[a+b+1,a+b-1,a+b+2]}}},
+      {icon:'🔷',name:'Basic Shapes',desc:'आकृतियाँ — Shapes around us',learn:{concept:'Shapes are everywhere! Circle (वृत्त), Square (वर्ग), Triangle (त्रिभुज)',example:'Wheel = circle 🔵  Book = rectangle 📕',tip:'Look for shapes in your classroom!'},gen:()=>{const sh=[['वृत्त (Circle)',0],['वर्ग (Square)',4],['त्रिभुज (Triangle)',3]];const s=sh[rand(0,2)];return{q:`${s[0]} के कितने कोने (corners) हैं?`,a:s[1],w:[s[1]+1,s[1]+2,2]}}},
+      {icon:'➖',name:'Simple Subtraction',desc:'घटाना — Taking away',learn:{concept:'Subtraction (घटाना) means taking away from a group.',example:'10 − 4 = 6',tip:'Count backwards on your fingers!'},gen:()=>{const a=rand(5,15),b=rand(1,a-1);return{q:`${a} − ${b} = ?`,a:a-b,w:[a-b+1,a-b-1,a+b]}}},
+      {icon:'📊',name:'Number Patterns',desc:'Even, odd, sequences',learn:{concept:'Numbers follow patterns. Even: 2,4,6,8... Odd: 1,3,5,7...',example:'2, 4, 6, ___ → next is 8',tip:'Even numbers end in 0,2,4,6,8'},gen:()=>{const start=rand(1,10)*2;return{q:`2, 4, 6, 8, ___ (what comes next?)`,a:10,w:[11,9,12]}}},
+      {icon:'💰',name:'Money Basics',desc:'Coins and notes — सिक्के',learn:{concept:'We use coins (सिक्के) and notes (नोट) to buy things.',example:'1 Rupee, 2 Rupees, 5 Rupees, 10 Rupees',tip:'Count coins by their value, not just by number!'},gen:()=>{const a=rand(1,9),b=rand(1,5);return{q:`${a} rupees + ${b} rupees = ?`,a:a+b,w:[a+b+1,a+b-1,a*b]}}}
+    ],
+    ireland:[
+      {icon:'🔢',name:'Counting to 20',desc:'Numbers and counting',learn:{concept:'Count objects carefully, one by one.',example:'Count the apples: 🍎🍎🍎🍎 = 4',tip:'Point to each object as you count!'},gen:()=>{const n=rand(1,10);return{q:`Count: ${'🍀'.repeat(n)} — how many?`,a:n,w:[n-1<1?2:n-1,n+1,n+2]}}},
+      {icon:'➕',name:'Addition to 10',desc:'Combining numbers',learn:{concept:'Add means putting together.',example:'4 + 3 = 7'},gen:()=>{const a=rand(1,5),b=rand(1,4);return{q:`${a} + ${b} = ?`,a:a+b,w:[a+b+1,a+b-1,a+b+2]}}},
+      {icon:'🔷',name:'Shapes & Space',desc:'2D and 3D shapes',learn:{concept:'Shapes have different properties.',example:'Square has 4 equal sides. Triangle has 3 sides.'},gen:()=>{const sh=[['square',4],['triangle',3],['circle',0],['rectangle',4]];const s=sh[rand(0,3)];return{q:`A ${s[0]} has ___ sides`,a:s[1],w:[s[1]+1,s[1]+2,2]}}},
+      {icon:'📏',name:'Length & Weight',desc:'Measuring and comparing',learn:{concept:'We compare length (long/short) and weight (heavy/light).',example:'A feather is lighter than a book.'},gen:()=>{const a=rand(2,8),b=rand(a+1,12);return{q:`Which is longer: ${a}cm or ${b}cm?`,a:b,w:[a,a+b,b+1]}}},
+      {icon:'📅',name:'Days & Time',desc:'Days of the week, seasons',learn:{concept:'There are 7 days in a week.',example:'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday'},gen:()=>{const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];const d=rand(0,5);return{q:`What day comes after ${days[d]}?`,a:days[d+1],w:[days[d===0?6:d-1],days[(d+2)%7],days[(d+3)%7]]}}}
+    ],
+    europe:[
+      {icon:'🔢',name:'Numbers 1–20',desc:'International early numeracy',learn:{concept:'Numbers are the foundation of all mathematics.',example:'1, 2, 3... uno, deux, drei, ένα'},gen:()=>{const n=rand(1,15);return{q:`What is ${n} + 1?`,a:n+1,w:[n,n+2,n-1]}}},
+      {icon:'🔷',name:'Shapes & Patterns',desc:'Geometry foundations',learn:{concept:'Shapes repeat to form patterns.',example:'🔵🔴🔵🔴 — what comes next? 🔵'},gen:()=>{const sh=[['circle',0],['square',4],['triangle',3],['hexagon',6]];const s=sh[rand(0,3)];return{q:`A ${s[0]} has how many vertices?`,a:s[1],w:[s[1]+1,s[1]+2,s[1]===0?3:s[1]-1]}}},
+      {icon:'➕',name:'Addition & Subtraction',desc:'Basic operations',learn:{concept:'All arithmetic begins with + and −',example:'6 + 4 = 10  |  10 − 4 = 6'},gen:()=>{const a=rand(1,8),b=rand(1,6);const op=rand(0,1);return op?{q:`${a+b} − ${b} = ?`,a:a,w:[a+1,a-1,a+b]}:{q:`${a} + ${b} = ?`,a:a+b,w:[a+b+1,a+b-1,a*b]}}},
+      {icon:'📊',name:'Data & Sorting',desc:'Classifying objects',learn:{concept:'We can sort objects by color, size, or shape.',example:'Sort by color: 🔴🔴🔴 | 🔵🔵'},gen:()=>{const a=rand(1,5),b=rand(1,5),c=rand(1,5);return{q:`Red=${a}, Blue=${b}, Green=${c}. How many total?`,a:a+b+c,w:[a+b+c+1,a+b,b+c]}}}
+    ]
+  }
+};
+
+// ═══════════════════ GRADE CONFIG ═══════════════════
+function makeTopicsForGrade(g, curr){
+  const key = g;
+  const db = TOPICS_DB[key];
+  if(db && db[curr]) return db[curr];
+  // Generic generator for grades not in DB
+  return generateGenericTopics(g, curr);
+}
+
+function generateGenericTopics(g, curr){
+  const gradeNum = g==='K'?0:parseInt(g);
+  const curriculumTopics = {
+    usa: {
+      1:[{icon:'🔢',name:'Place Value (Tens/Ones)',desc:'Understand 2-digit numbers'},{icon:'➕',name:'Addition & Subtraction to 20',desc:'Fluency with facts'},{icon:'📏',name:'Measurement',desc:'Length using non-standard units'},{icon:'🔷',name:'Geometry',desc:'Shapes and their attributes'},{icon:'⏰',name:'Telling Time',desc:'Hours and half-hours'},{icon:'📊',name:'Data & Graphs',desc:'Picture graphs and bar graphs'}],
+      2:[{icon:'🔢',name:'Place Value to 1000',desc:'3-digit numbers'},{icon:'➕',name:'Adding & Subtracting to 100',desc:'Mental math strategies'},{icon:'✖️',name:'Intro to Multiplication',desc:'Equal groups and arrays'},{icon:'💰',name:'Money',desc:'Counting coins and bills'},{icon:'⏰',name:'Time to 5 Minutes',desc:'Reading analog clocks'},{icon:'📐',name:'Fractions Intro',desc:'Halves, thirds, fourths'}],
+      3:[{icon:'✖️',name:'Multiplication 0–10',desc:'Times tables fluency'},{icon:'➗',name:'Division',desc:'Equal sharing and grouping'},{icon:'🍕',name:'Fractions',desc:'Numerator and denominator'},{icon:'📐',name:'Area & Perimeter',desc:'Measuring rectangles'},{icon:'🕐',name:'Elapsed Time',desc:'Minutes and hours'},{icon:'📊',name:'Data',desc:'Bar graphs and line plots'}],
+      4:[{icon:'✖️',name:'Multi-Digit Multiplication',desc:'Up to 4 digits × 1 digit'},{icon:'➗',name:'Long Division',desc:'Divide with remainders'},{icon:'🍕',name:'Fraction Operations',desc:'Add and subtract fractions'},{icon:'📉',name:'Decimals',desc:'Tenths and hundredths'},{icon:'📐',name:'Angles',desc:'Degrees and types'},{icon:'📐',name:'Symmetry',desc:'Lines of symmetry'}],
+      5:[{icon:'🍕',name:'Fraction Multiplication',desc:'Fractions × fractions'},{icon:'📉',name:'Decimal Operations',desc:'Add, subtract, multiply decimals'},{icon:'📦',name:'Volume',desc:'Cubic units'},{icon:'📈',name:'Coordinate Plane',desc:'Plotting ordered pairs'},{icon:'🔢',name:'Powers of 10',desc:'Multiplying by 10, 100, 1000'},{icon:'📐',name:'2D & 3D Shapes',desc:'Properties and classification'}],
+      6:[{icon:'➗',name:'Ratios',desc:'Part-to-part and part-to-whole'},{icon:'💯',name:'Percentages',desc:'Of a number and of change'},{icon:'➕',name:'Integers',desc:'Negative and positive numbers'},{icon:'🔣',name:'Expressions',desc:'Variables and evaluation'},{icon:'⚖️',name:'Equations',desc:'One-step equations'},{icon:'📊',name:'Statistics',desc:'Mean, median, mode, range'}],
+      7:[{icon:'🔁',name:'Proportional Relationships',desc:'Unit rates and ratios'},{icon:'🔢',name:'Rational Numbers',desc:'Operations with fractions/decimals'},{icon:'📐',name:'Scale Drawings',desc:'Maps and models'},{icon:'📐',name:'Angles & Triangles',desc:'Complementary, supplementary'},{icon:'🔣',name:'Algebraic Expressions',desc:'Expanding and factoring'},{icon:'💯',name:'Percent Problems',desc:'Discount, tax, tip, markup'}],
+      8:[{icon:'🔣',name:'Linear Equations',desc:'Solving one and two-step'},{icon:'📈',name:'Functions',desc:'Input/output tables and graphs'},{icon:'📐',name:'Pythagorean Theorem',desc:'a² + b² = c²'},{icon:'📊',name:'Statistics',desc:'Scatter plots and line of best fit'},{icon:'🔺',name:'Transformations',desc:'Translation, rotation, reflection'},{icon:'💡',name:'Scientific Notation',desc:'Very large and very small'}],
+      9:[{icon:'🔣',name:'Algebra I — Linear',desc:'Solving and graphing equations'},{icon:'📈',name:'Quadratic Functions',desc:'Parabolas and vertex'},{icon:'🔢',name:'Polynomials',desc:'Add, subtract, multiply'},{icon:'🍕',name:'Rational Expressions',desc:'Simplifying and operations'},{icon:'📏',name:'Geometry Foundations',desc:'Proofs and logic'},{icon:'📐',name:'Coordinate Geometry',desc:'Distance and midpoint formulas'}],
+      10:[{icon:'🔺',name:'Geometry — Triangles',desc:'Congruence and similarity'},{icon:'⭕',name:'Circles',desc:'Arc, chord, sector'},{icon:'🔢',name:'Algebra II — Exponents',desc:'Exponential functions'},{icon:'📊',name:'Probability',desc:'Theoretical and experimental'},{icon:'🔭',name:'Trig Basics',desc:'Sin, Cos, Tan'},{icon:'📐',name:'3D Geometry',desc:'Surface area and volume'}],
+      11:[{icon:'📈',name:'Pre-Calculus Functions',desc:'Polynomial, rational, radical'},{icon:'🔭',name:'Advanced Trigonometry',desc:'Identities and equations'},{icon:'📊',name:'Statistics & Data',desc:'Normal distribution'},{icon:'🔢',name:'Sequences & Series',desc:'Arithmetic and geometric'},{icon:'📉',name:'Logarithms',desc:'Log rules and applications'},{icon:'🔺',name:'Vectors',desc:'Magnitude and direction'}],
+      12:[{icon:'📈',name:'Calculus — Limits',desc:'Approaching a value'},{icon:'📉',name:'Derivatives',desc:'Rate of change'},{icon:'📊',name:'Integrals',desc:'Area under a curve'},{icon:'🔢',name:'Differential Equations',desc:'Intro level'},{icon:'📊',name:'AP Statistics',desc:'Inference and testing'},{icon:'🔣',name:'Complex Numbers',desc:'Imaginary unit i'}]
+    },
+    india: {
+      1:[{icon:'🔢',name:'Numbers 1–100',desc:'Counting and writing'},{icon:'➕',name:'Addition up to 99',desc:'With and without carrying'},{icon:'➖',name:'Subtraction up to 99',desc:'With borrowing'},{icon:'🔷',name:'Basic Shapes',desc:'2D shapes around us'},{icon:'⏰',name:'Time',desc:'Days, weeks, months'},{icon:'💰',name:'Money (₹)',desc:'Coins and notes'}],
+      2:[{icon:'✖️',name:'Tables 2–5',desc:'Multiplication tables'},{icon:'🔢',name:'Numbers to 999',desc:'Place value'},{icon:'➕',name:'Addition with Carrying',desc:'3-digit numbers'},{icon:'📏',name:'Measurement',desc:'cm, m, kg, litre'},{icon:'🔷',name:'Shapes & Patterns',desc:'Tiling and patterns'},{icon:'💰',name:'Money Problems',desc:'Simple transactions'}],
+      3:[{icon:'✖️',name:'Tables 6–10',desc:'Multiplication mastery'},{icon:'➗',name:'Division',desc:'Equal sharing'},{icon:'🍕',name:'Fractions Intro',desc:'Half, quarter, three-quarter'},{icon:'📏',name:'Measurement',desc:'Perimeter of shapes'},{icon:'💰',name:'Money (₹)',desc:'Add and subtract amounts'},{icon:'⏰',name:'Time Problems',desc:'Hours and minutes'}],
+      4:[{icon:'✖️',name:'Large Multiplication',desc:'3-digit × 2-digit'},{icon:'🍕',name:'Fractions',desc:'Like and unlike fractions'},{icon:'📐',name:'Geometry',desc:'Lines, angles, shapes'},{icon:'📊',name:'Data Handling',desc:'Tally marks, bar graphs'},{icon:'🔢',name:'Large Numbers',desc:'Lakhs and crores'},{icon:'💰',name:'Money Applications',desc:'Profit, loss, bills'}],
+      5:[{icon:'🍕',name:'Fraction Operations',desc:'Adding unlike fractions'},{icon:'📉',name:'Decimals',desc:'Tenths, hundredths'},{icon:'📦',name:'Volume & Capacity',desc:'Litre and ml'},{icon:'📐',name:'Perimeter & Area',desc:'Rectangles and squares'},{icon:'🔢',name:'Factors & Multiples',desc:'HCF and LCM'},{icon:'📊',name:'Data Handling',desc:'Mean and bar charts'}],
+      6:[{icon:'🔢',name:'Integers',desc:'Positive and negative'},{icon:'🍕',name:'Fractions & Decimals',desc:'All operations'},{icon:'📐',name:'Basic Geometry',desc:'Lines, angles, circles'},{icon:'💯',name:'Ratio & Proportion',desc:'Direct proportion'},{icon:'🔢',name:'Factors & Multiples',desc:'Prime factorisation'},{icon:'📊',name:'Data Handling',desc:'Mean, median, mode'}],
+      7:[{icon:'🔢',name:'Integers',desc:'All operations'},{icon:'🍕',name:'Fractions & Decimals',desc:'Multiplication/division'},{icon:'💯',name:'Ratio & Proportion',desc:'Unitary method'},{icon:'💯',name:'Percentage',desc:'Profit, loss, interest'},{icon:'📐',name:'Triangles & Lines',desc:'Properties and types'},{icon:'📊',name:'Data Handling',desc:'Bar graph, mean'}],
+      8:[{icon:'🔢',name:'Rational Numbers',desc:'All operations'},{icon:'📐',name:'Quadrilaterals',desc:'Properties and types'},{icon:'📦',name:'Mensuration',desc:'Area of special shapes'},{icon:'🔣',name:'Algebraic Expressions',desc:'Addition, subtraction'},{icon:'💯',name:'Linear Equations',desc:'One variable'},{icon:'📊',name:'Direct Proportion',desc:'Graphs and tables'}],
+      9:[{icon:'🔢',name:'Number Systems',desc:'Real numbers, surds'},{icon:'📐',name:'Coordinate Geometry',desc:'Plotting and distance'},{icon:'📐',name:'Euclid\'s Geometry',desc:'Axioms and theorems'},{icon:'🔺',name:'Triangles',desc:'Congruence criteria'},{icon:'📦',name:'Surface Area & Volume',desc:'3D solids'},{icon:'📊',name:'Statistics',desc:'Mean, median, mode'}],
+      10:[{icon:'🔢',name:'Real Numbers',desc:'Euclid, HCF, LCM'},{icon:'🔣',name:'Polynomials',desc:'Zeroes and division'},{icon:'⚖️',name:'Quadratic Equations',desc:'Factoring and formula'},{icon:'📐',name:'Circles',desc:'Tangents and theorems'},{icon:'📐',name:'Areas of Figures',desc:'Sectors and triangles'},{icon:'📊',name:'Probability',desc:'Classical definition'}],
+      11:[{icon:'📊',name:'Sets',desc:'Union, intersection, complement'},{icon:'📈',name:'Functions & Relations',desc:'Domain and range'},{icon:'🔭',name:'Trigonometry',desc:'Identities and equations'},{icon:'🔢',name:'Complex Numbers',desc:'Real and imaginary'},{icon:'🔢',name:'Sequences & Series',desc:'AP and GP'},{icon:'📐',name:'3D Geometry',desc:'Direction cosines'}],
+      12:[{icon:'📈',name:'Continuity & Differentiability',desc:'Calculus foundations'},{icon:'📉',name:'Derivatives',desc:'Chain rule, product rule'},{icon:'📊',name:'Integrals',desc:'Definite and indefinite'},{icon:'🔢',name:'Matrices & Determinants',desc:'Operations and inverse'},{icon:'🎯',name:'Probability',desc:'Bayes theorem, distributions'},{icon:'🔣',name:'Linear Programming',desc:'Maximise and minimise'}]
+    },
+    ireland: {
+      1:[{icon:'🔢',name:'Number 1–10',desc:'Strand: Number'},{icon:'➕',name:'Adding Within 10',desc:'Combining quantities'},{icon:'🔷',name:'Shapes & Space',desc:'2D and 3D'},{icon:'📏',name:'Measures',desc:'Long/short, heavy/light'},{icon:'📅',name:'Time',desc:'Days, morning, evening'},{icon:'📊',name:'Data',desc:'Simple charts'}],
+      2:[{icon:'🔢',name:'Numbers to 100',desc:'Counting on and back'},{icon:'➕',name:'Addition & Subtraction',desc:'Up to 99'},{icon:'✖️',name:'Multiplication Intro',desc:'Equal groups'},{icon:'🍕',name:'Fractions',desc:'Halves and quarters'},{icon:'💰',name:'Money (€)',desc:'Cents and euro'},{icon:'📏',name:'Length',desc:'Centimetres and metres'}],
+      3:[{icon:'✖️',name:'Multiplication Tables',desc:'2, 3, 4, 5, 10'},{icon:'➗',name:'Division',desc:'Sharing equally'},{icon:'📐',name:'Perimeter',desc:'Measuring shapes'},{icon:'🍕',name:'Fractions',desc:'Thirds, sixths'},{icon:'📊',name:'Data',desc:'Bar charts and tables'},{icon:'⏰',name:'Time',desc:'Minutes and hours'}],
+      4:[{icon:'✖️',name:'Tables Mastery',desc:'6, 7, 8, 9 tables'},{icon:'🍕',name:'Decimals',desc:'Tenths'},{icon:'📐',name:'Area',desc:'Square centimetres'},{icon:'💯',name:'Percentages',desc:'Common percentages'},{icon:'🔷',name:'Lines & Angles',desc:'Types of angles'},{icon:'📊',name:'Data',desc:'Median and mode'}],
+      5:[{icon:'🍕',name:'Fractions & Decimals',desc:'All operations'},{icon:'💯',name:'Percentages',desc:'Of amounts'},{icon:'📐',name:'2D Shapes',desc:'Area and perimeter'},{icon:'📦',name:'3D Shapes',desc:'Nets and surface'},{icon:'🔢',name:'Number Theory',desc:'Factors and primes'},{icon:'📊',name:'Data',desc:'Mean and charts'}],
+      6:[{icon:'🔢',name:'Number & Place Value',desc:'Millions'},{icon:'🍕',name:'Fractions, Decimals, %',desc:'Converting and operating'},{icon:'📐',name:'Geometry',desc:'Angles in shapes'},{icon:'📦',name:'3D Shapes',desc:'Volume and surface'},{icon:'📊',name:'Statistics',desc:'Averages and graphs'},{icon:'💰',name:'Money Problems',desc:'Budgeting and profit'}],
+      7:[{icon:'🔣',name:'Algebra Intro',desc:'Junior Cert preparation'},{icon:'🔢',name:'Number Patterns',desc:'Sequences'},{icon:'📐',name:'Geometry',desc:'Constructions'},{icon:'💯',name:'Ratio & Proportion',desc:'Rate and proportion'},{icon:'📊',name:'Statistics',desc:'Sampling and bias'},{icon:'🔢',name:'Integers',desc:'Directed numbers'}],
+      8:[{icon:'🔣',name:'Algebra',desc:'Equations and inequalities'},{icon:'📈',name:'Functions',desc:'Graphs and relationships'},{icon:'📐',name:'Geometry',desc:'Theorems and proofs'},{icon:'🔢',name:'Number Systems',desc:'Rational and irrational'},{icon:'📊',name:'Statistics',desc:'Standard deviation'},{icon:'💯',name:'Percentages',desc:'Compound interest'}],
+      9:[{icon:'🔣',name:'Junior Cert Algebra',desc:'Full course review'},{icon:'📐',name:'Geometry Theorems',desc:'Proving results'},{icon:'🔭',name:'Trigonometry Intro',desc:'Right-angled triangles'},{icon:'📊',name:'Statistics',desc:'Data analysis'},{icon:'🔢',name:'Sets & Probability',desc:'Venn diagrams'},{icon:'📈',name:'Coordinate Geometry',desc:'Lines and circles'}],
+      10:[{icon:'🔭',name:'Trigonometry',desc:'Sin/Cos/Tan in all quadrants'},{icon:'📈',name:'Algebraic Graphs',desc:'Quadratics and cubics'},{icon:'📐',name:'Geometry',desc:'Circle theorems'},{icon:'📊',name:'Statistics',desc:'Normal distribution'},{icon:'🔢',name:'Complex Numbers',desc:'Leaving Cert intro'},{icon:'💰',name:'Financial Maths',desc:'Loans and investments'}],
+      11:[{icon:'📈',name:'Calculus Intro',desc:'Leaving Cert higher'},{icon:'🔭',name:'Trig Identities',desc:'Compound angles'},{icon:'🔢',name:'Algebra Advanced',desc:'Inequalities and logs'},{icon:'📊',name:'Probability',desc:'Distributions'},{icon:'📐',name:'Vectors',desc:'2D and 3D'},{icon:'🔢',name:'Sequences & Series',desc:'Geometric sums'}],
+      12:[{icon:'📉',name:'Derivatives',desc:'Rules and applications'},{icon:'📊',name:'Integration',desc:'Definite and area'},{icon:'📊',name:'Statistics & Inference',desc:'Hypothesis testing'},{icon:'🔢',name:'Number Theory',desc:'Proof by induction'},{icon:'📐',name:'3D Coordinate Geometry',desc:'Planes and lines'},{icon:'🔣',name:'Differential Equations',desc:'Simple types'}]
+    },
+    europe: {
+      1:[{icon:'🔢',name:'Number Sense 1–20',desc:'IB/Cambridge Early Years'},{icon:'➕',name:'Addition',desc:'Combining quantities'},{icon:'➖',name:'Subtraction',desc:'Removing quantities'},{icon:'🔷',name:'2D & 3D Shapes',desc:'Properties and names'},{icon:'📏',name:'Measurement',desc:'Direct comparison'},{icon:'📊',name:'Data',desc:'Sorting and classifying'}],
+      2:[{icon:'🔢',name:'Numbers to 100',desc:'Place value and counting'},{icon:'✖️',name:'Multiplication Intro',desc:'Repeated addition'},{icon:'🍕',name:'Fractions',desc:'Equal parts of a whole'},{icon:'📏',name:'Measurement',desc:'Standard units'},{icon:'⏰',name:'Time',desc:'Hours and half-hours'},{icon:'💰',name:'Money',desc:'€/£ and coins'}],
+      3:[{icon:'✖️',name:'Times Tables 2–10',desc:'Memorisation and application'},{icon:'➗',name:'Division',desc:'Inverse of multiplication'},{icon:'📐',name:'Perimeter',desc:'Add all sides'},{icon:'🍕',name:'Fractions',desc:'Equivalent fractions'},{icon:'📊',name:'Data',desc:'Bar charts and pictograms'},{icon:'🔢',name:'Place Value',desc:'Up to 1000'}],
+      4:[{icon:'🍕',name:'Fraction Operations',desc:'Add and subtract'},{icon:'📉',name:'Decimals',desc:'Tenths and hundredths'},{icon:'📐',name:'Area',desc:'Rectangle and triangle'},{icon:'🔢',name:'Factors & Primes',desc:'Factor trees'},{icon:'📊',name:'Statistics',desc:'Mean and range'},{icon:'🔷',name:'Angles',desc:'Types and measuring'}],
+      5:[{icon:'💯',name:'Percentages',desc:'Convert and calculate'},{icon:'📦',name:'Volume',desc:'Cubic centimetres'},{icon:'📈',name:'Coordinate Geometry',desc:'Plotting points'},{icon:'🔢',name:'Negative Numbers',desc:'Operations'},{icon:'📐',name:'Symmetry',desc:'Reflection and rotation'},{icon:'📊',name:'Probability',desc:'Likelihood'}],
+      6:[{icon:'🔣',name:'Algebra Intro',desc:'Letters for unknowns'},{icon:'💯',name:'Ratio & Proportion',desc:'Direct and inverse'},{icon:'📐',name:'Geometry',desc:'Angles in polygons'},{icon:'📊',name:'Statistics',desc:'Mean, median, mode'},{icon:'🔢',name:'Integers',desc:'All operations'},{icon:'📉',name:'Decimals',desc:'Multiply and divide'}],
+      7:[{icon:'🔣',name:'Linear Equations',desc:'Solve for x'},{icon:'📈',name:'Graphs',desc:'Straight-line graphs y=mx+c'},{icon:'💯',name:'Percentages',desc:'Reverse percentage'},{icon:'📊',name:'Statistics',desc:'Sampling methods'},{icon:'🔢',name:'Standard Form',desc:'Scientific notation'},{icon:'📐',name:'Constructions',desc:'Compass and ruler'}],
+      8:[{icon:'🔺',name:'Pythagoras',desc:'Right-angled triangles'},{icon:'🔭',name:'Trig Intro',desc:'SOH CAH TOA'},{icon:'🔣',name:'Simultaneous Equations',desc:'Two unknowns'},{icon:'📊',name:'Probability',desc:'Tree diagrams'},{icon:'📐',name:'Circle Geometry',desc:'Sector and arc'},{icon:'📉',name:'Bounds & Limits',desc:'Upper and lower'}],
+      9:[{icon:'📈',name:'Quadratic Equations',desc:'Factoring and formula'},{icon:'🔭',name:'Trigonometry',desc:'Non-right triangles'},{icon:'📊',name:'Statistics',desc:'Standard deviation'},{icon:'🔢',name:'Surds & Indices',desc:'Simplification'},{icon:'📐',name:'Vectors',desc:'Addition and scalar'},{icon:'📈',name:'Functions',desc:'Domain and range'}],
+      10:[{icon:'📈',name:'A-Level / IB Algebra',desc:'Polynomials and factor theorem'},{icon:'🔭',name:'Trig Identities',desc:'Proving and solving'},{icon:'📊',name:'Statistics',desc:'Binomial and normal'},{icon:'📉',name:'Logarithms',desc:'Natural log and laws'},{icon:'🔢',name:'Matrices',desc:'Operations and determinants'},{icon:'📐',name:'3D Geometry',desc:'Coordinates in space'}],
+      11:[{icon:'📉',name:'Calculus — Differentiation',desc:'Rules and applications'},{icon:'📊',name:'Integration',desc:'Area and volumes'},{icon:'🔢',name:'Complex Numbers',desc:'Argand diagram'},{icon:'📊',name:'Probability Distributions',desc:'Poisson and binomial'},{icon:'🔢',name:'Proof',desc:'Contradiction and induction'},{icon:'🔣',name:'Differential Equations',desc:'Separable types'}],
+      12:[{icon:'📉',name:'Further Calculus',desc:'Integration by parts'},{icon:'📊',name:'Statistical Inference',desc:'Hypothesis testing'},{icon:'🔢',name:'Number Theory',desc:'Modular arithmetic'},{icon:'🔣',name:'Linear Algebra',desc:'Eigenvalues'},{icon:'📈',name:'Graph Theory',desc:'Networks and paths'},{icon:'🔢',name:'Sequences & Series',desc:'Power series'}]
+    }
+  };
+  const base = curriculumTopics[curr];
+  if(base && base[gradeNum]){
+    return base[gradeNum].map(t=>({
+      ...t,
+      learn:{concept:`${t.name} is a key topic in Grade ${g} mathematics.`,example:`Apply ${t.name} in real-world situations.`,tip:`Practice ${t.name} daily for best results!`},
+      gen:()=>defaultGen(gradeNum)
+    }));
+  }
+  return [{icon:'🔢',name:'Mathematics',desc:'Practice problems',learn:{concept:'Keep practicing!',example:'',tip:''},gen:()=>defaultGen(gradeNum)}];
+}
+
+function defaultGen(gradeNum){
+  if(gradeNum<=2){const a=rand(1,10),b=rand(1,10);return{q:`${a} + ${b} = ?`,a:a+b,w:[a+b+1,a+b-1,a+b+2]};}
+  if(gradeNum<=5){const a=rand(2,12),b=rand(2,12);return{q:`${a} × ${b} = ?`,a:a*b,w:[a*b+a,a*b-b,a*(b+1)]};}
+  if(gradeNum<=8){const x=rand(2,12),m=rand(2,6);return{q:`${m}x = ${m*x}, x = ?`,a:x,w:[x+1,x-1,x+2]};}
+  const n=rand(2,5),x=rand(1,5);return{q:`f(x)=x^${n}, f'(${x})=?`,a:n*Math.pow(x,n-1),w:[n*Math.pow(x,n-1)+1,n*x,Math.pow(x,n)]};
+}
+
+// ═══════════════════ LEADERBOARD DATA ═══════════════════
+const LEADERBOARD = [
+  {name:'Arjun S.',grade:'Grade 8',pts:4820,streak:15,curr:'india',av:'#6C63FF'},
+  {name:'Sophie M.',grade:'Grade 6',pts:4510,streak:12,curr:'ireland',av:'#FF6584'},
+  {name:'Lucas R.',grade:'Grade 10',pts:4280,streak:9,curr:'europe',av:'#43D9AD'},
+  {name:'Priya K.',grade:'Grade 5',pts:3990,streak:21,curr:'india',av:'#FF9F1C'},
+  {name:'Emma T.',grade:'Grade 7',pts:3750,streak:7,curr:'usa',av:'#A78BFA'},
+  {name:'James O.',grade:'Grade 9',pts:3420,streak:5,curr:'ireland',av:'#FF6584'},
+  {name:'Ananya P.',grade:'Grade 4',pts:3190,streak:14,curr:'india',av:'#6C63FF'},
+  {name:'Noah B.',grade:'Grade 11',pts:2980,streak:3,curr:'usa',av:'#43D9AD'}
+];
+const ACTIVITIES = [
+  {icon:'📝',topic:'Fractions — Test',detail:'Grade 5 · USA Curriculum',score:92,when:'Today'},
+  {icon:'✏️',topic:'Multiplication — Practice',detail:'Grade 5 · 15 problems',score:80,when:'Yesterday'},
+  {icon:'📖',topic:'Decimals — Learn',detail:'Grade 5 · Completed reading',score:null,when:'2 days ago'},
+  {icon:'📝',topic:'Division — Test',detail:'Grade 5 · USA Curriculum',score:67,when:'3 days ago'},
+  {icon:'✏️',topic:'Geometry — Practice',detail:'Grade 5 · 10 problems',score:90,when:'4 days ago'}
+];
+
+// ═══════════════════ APP STATE ═══════════════════
+let currentUser = null;
+let currentGrade = null;
+let currentTopic = null;
+let currentMode = 'practice';
+let questions = [], qIdx = 0, score = 0, answered = false;
+
+// ═══════════════════ GRADE GRIDS ═══════════════════
+function buildGradeGrids(){
+  const bands = [
+    ['grid-early',[{g:'K',cls:'gt-k',lbl:'Kinder'}]],
+    ['grid-elem',[1,2,3,4,5].map(n=>({g:String(n),cls:'gt-elem',lbl:`Grade ${n}`}))],
+    ['grid-mid',[6,7,8].map(n=>({g:String(n),cls:'gt-mid',lbl:`Grade ${n}`}))],
+    ['grid-high',[9,10,11,12].map(n=>({g:String(n),cls:'gt-high',lbl:`Grade ${n}`}))]
+  ];
+  bands.forEach(([id,grades])=>{
+    const el=document.getElementById(id); if(!el)return; el.innerHTML='';
+    grades.forEach(({g,cls,lbl})=>{
+      const btn=document.createElement('div');
+      btn.className='grade-tile '+cls;
+      btn.innerHTML=`<div class="gn">${g}</div><div class="gl">${lbl}</div>`;
+      btn.onclick=()=>selectGrade(g);
+      el.appendChild(btn);
+    });
+  });
+}
+
+function selectCurriculum(curr, btn){
+  activeCurriculum=curr;
+  document.querySelectorAll('.curr-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function selectGrade(g){
+  currentGrade=g;
+  const topics=makeTopicsForGrade(g, activeCurriculum);
+  document.getElementById('topics-grade-title').textContent=`Grade ${g} Topics`;
+  document.getElementById('topics-curr-badge').innerHTML=`<span class="tag tag-curr">${CURR_LABELS[activeCurriculum]}</span>`;
+  const grid=document.getElementById('topic-grid'); grid.innerHTML='';
+  topics.forEach((t,i)=>{
+    const card=document.createElement('div');
+    card.className='topic-tile animate-slide';
+    card.style.animationDelay=(i*0.05)+'s';
+    card.innerHTML=`<div class="topic-icon">${t.icon}</div><div class="topic-name">${t.name}</div><div class="topic-desc">${t.desc}</div>`;
+    card.onclick=()=>selectTopic(t);
+    grid.appendChild(card);
+  });
+  showScreen('screen-topics');
+}
+
+function selectTopic(t){
+  currentTopic=t;
+  document.getElementById('mode-topic-title').textContent=t.name;
+  buildStreaks();
+  showScreen('screen-mode');
+}
+
+function buildStreaks(){
+  const days=['M','T','W','T','F','S','S'];
+  const done=[true,true,true,true,false,false,false];
+  const row=document.getElementById('streak-row'); if(!row)return;
+  row.innerHTML='';
+  days.forEach((d,i)=>{
+    const sp=document.createElement('div');
+    sp.className='streak-day '+(i===4?'streak-today':done[i]?'streak-done':'streak-miss');
+    sp.textContent=d; row.appendChild(sp);
+  });
+}
+
+// ═══════════════════ LEARN ═══════════════════
+function startLearn(){
+  const l=currentTopic.learn||{};
+  document.getElementById('learn-title').textContent='📖 '+currentTopic.name;
+  document.getElementById('learn-content').innerHTML=`
+    ${l.concept?`<div class="learn-concept"><div class="lc-tag">💡 Concept</div><div class="lc-body">${l.concept.replace(/\n/g,'<br>')}</div></div>`:''}
+    ${l.example?`<div class="learn-example"><div class="le-tag">📌 Example</div><div class="lc-body">${l.example.replace(/\n/g,'<br>')}</div></div>`:''}
+    ${l.tip?`<div class="learn-tip"><div class="lt-tag">🌟 Tip</div><div class="lc-body">${l.tip}</div></div>`:''}
+  `;
+  showScreen('screen-learn');
+}
+
+// ═══════════════════ TIMER ═══════════════════
+let timerInterval = null;
+let timerSeconds = 30;
+let timerTotal = 30;
+let quizStartTime = null;
+let quizElapsed = 0;
+
+const CIRCUMFERENCE = 2 * Math.PI * 21; // r=21
+
+function startTimer(secs){
+  clearTimer();
+  timerSeconds = secs;
+  timerTotal = secs;
+  updateTimerUI();
+  timerInterval = setInterval(()=>{
+    timerSeconds--;
+    updateTimerUI();
+    if(timerSeconds <= 0){ clearTimer(); onTimerExpired(); }
+  }, 1000);
+}
+
+function clearTimer(){
+  if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+}
+
+function updateTimerUI(){
+  const el = document.getElementById('timer-digits');
+  const fill = document.getElementById('timer-ring-fill');
+  const wrap = document.getElementById('timer-wrap');
+  if(!el||!fill) return;
+  el.textContent = timerSeconds;
+  const pct = timerSeconds / timerTotal;
+  const offset = CIRCUMFERENCE * (1 - pct);
+  fill.style.strokeDashoffset = offset;
+  // Color shifts: green→orange→red
+  wrap.className = 'timer-wrap visible ' + (pct > 0.5 ? 'timer-ok' : pct > 0.25 ? 'timer-warn' : 'timer-urgent');
+  // Pulse on last 5 seconds
+  if(timerSeconds <= 5){ el.style.animation = 'pop 0.3s ease'; setTimeout(()=>{ if(el) el.style.animation=''; }, 300); }
+}
+
+function onTimerExpired(){
+  if(answered) return;
+  // Auto-mark unanswered as wrong, reveal correct
+  document.querySelectorAll('.ans-btn').forEach(b=>{
+    b.disabled = true;
+    const q = questions[qIdx];
+    if(parseFloat(b.textContent)===parseFloat(q.a)||b.textContent===String(q.a)) b.classList.add('correct');
+  });
+  answered = true;
+  playSound('wrong');
+  // Show overlay
+  quizElapsed = Math.round((Date.now() - quizStartTime) / 1000);
+  document.getElementById('timesup-answered').textContent = qIdx + (answered ? 1 : 0);
+  document.getElementById('timesup-overlay').style.display = 'flex';
+}
+
+function dismissTimesUp(){
+  document.getElementById('timesup-overlay').style.display = 'none';
+  // Fill remaining questions as 0 score
+  qIdx = questions.length - 1;
+  showResults();
+}
+
+function quitQuiz(){
+  clearTimer();
+  stopSpeech();
+  showScreen('screen-mode');
+}
+
+// ═══════════════════ AUDIO / SPEECH ═══════════════════
+let speechSynth = window.speechSynthesis;
+let currentUtterance = null;
+let isSpeaking = false;
+
+// Language code map for speech synthesis
+const LANG_SPEECH = { en:'en-US', hi:'hi-IN', te:'te-IN', fr:'fr-FR', es:'es-ES' };
+
+function stopSpeech(){
+  if(speechSynth){ speechSynth.cancel(); }
+  isSpeaking = false;
+  resetSpeakBtn('speak-q-btn', 'Read Question');
+  resetSpeakBtn('speak-learn-btn', 'Listen to Lesson');
+}
+
+function resetSpeakBtn(id, label){
+  const btn = document.getElementById(id); if(!btn) return;
+  btn.classList.remove('speaking');
+  const span = btn.querySelector('span'); if(span) span.textContent = label;
+  // Remove audio bars
+  const bar = btn.querySelector('.audio-bar'); if(bar) bar.remove();
+}
+
+function setSpeakingBtn(id, label){
+  const btn = document.getElementById(id); if(!btn) return;
+  btn.classList.add('speaking');
+  const span = btn.querySelector('span'); if(span) span.textContent = label;
+  if(!btn.querySelector('.audio-bar')){
+    const bar = document.createElement('div'); bar.className='audio-bar';
+    bar.innerHTML='<span></span><span></span><span></span><span></span><span></span>';
+    btn.appendChild(bar);
+  }
+}
+
+function speak(text, btnId, onLabel, offLabel, onDone){
+  if(!speechSynth){ alert('Sorry, your browser does not support text-to-speech.'); return; }
+  if(isSpeaking){ stopSpeech(); if(onDone) onDone(); return; }
+  stopSpeech();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = LANG_SPEECH[LANG] || 'en-US';
+  utter.rate = 0.9;
+  utter.pitch = 1.1;
+  utter.volume = 1;
+  isSpeaking = true;
+  setSpeakingBtn(btnId, onLabel);
+  utter.onend = ()=>{ isSpeaking=false; resetSpeakBtn(btnId, offLabel); if(onDone) onDone(); };
+  utter.onerror = ()=>{ isSpeaking=false; resetSpeakBtn(btnId, offLabel); };
+  speechSynth.speak(utter);
+  currentUtterance = utter;
+}
+
+function speakQuestion(){
+  const q = questions[qIdx];
+  if(!q) return;
+  speak(q.q, 'speak-q-btn', 'Stop', 'Read Question');
+}
+
+function speakLearnContent(){
+  const topic = currentTopic;
+  if(!topic||!topic.learn) return;
+  const l = topic.learn;
+  const text = [
+    topic.name + '.',
+    l.concept ? 'Concept. ' + l.concept : '',
+    l.example ? 'Example. ' + l.example.replace(/[→]/g,' means ') : '',
+    l.tip ? 'Tip. ' + l.tip : ''
+  ].filter(Boolean).join(' ');
+  speak(text, 'speak-learn-btn', 'Stop', 'Listen to Lesson');
+}
+
+function speakFeedback(text){
+  if(!speechSynth) return;
+  speechSynth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = LANG_SPEECH[LANG] || 'en-US';
+  u.rate = 1; u.pitch = 1.2; u.volume = 0.9;
+  speechSynth.speak(u);
+}
+
+// ═══════════════════ SOUND EFFECTS ═══════════════════
+let audioCtx = null;
+function getAudioCtx(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+
+function playSound(type){
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if(type==='correct'){
+      osc.type='sine'; osc.frequency.setValueAtTime(523,ctx.currentTime); osc.frequency.setValueAtTime(659,ctx.currentTime+0.1); osc.frequency.setValueAtTime(784,ctx.currentTime+0.2);
+      gain.gain.setValueAtTime(0.3,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.5);
+    } else if(type==='wrong'){
+      osc.type='sawtooth'; osc.frequency.setValueAtTime(220,ctx.currentTime); osc.frequency.setValueAtTime(180,ctx.currentTime+0.1);
+      gain.gain.setValueAtTime(0.2,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.3);
+    } else if(type==='tick'){
+      osc.type='square'; osc.frequency.setValueAtTime(800,ctx.currentTime);
+      gain.gain.setValueAtTime(0.08,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.05);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.05);
+    } else if(type==='timesup'){
+      osc.type='square'; osc.frequency.setValueAtTime(440,ctx.currentTime); osc.frequency.setValueAtTime(220,ctx.currentTime+0.2); osc.frequency.setValueAtTime(110,ctx.currentTime+0.4);
+      gain.gain.setValueAtTime(0.4,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.7);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.7);
+    }
+  } catch(e){}
+}
+
+// ═══════════════════ QUIZ ═══════════════════
+function startQuiz(mode){
+  currentMode = mode;
+  clearTimer(); stopSpeech();
+  const count = mode==='test' ? 10 : 6;
+  questions = Array.from({length:count}, ()=>currentTopic.gen());
+  qIdx=0; score=0; answered=false;
+  quizStartTime = Date.now(); quizElapsed = 0;
+  const badge = document.getElementById('quiz-mode-badge');
+  if(badge){ badge.textContent=mode==='test'?'📝 Test':'✏️ Practice'; badge.style.background=mode==='test'?'#FFF3E0':'#E3F2FD'; badge.style.color=mode==='test'?'#BF360C':'#1565C0'; }
+  // Show/hide timer
+  const tw = document.getElementById('timer-wrap');
+  if(tw) tw.className = mode==='test' ? 'timer-wrap visible timer-ok' : 'timer-wrap';
+  showScreen('screen-quiz');
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const q = questions[qIdx];
+  const total = questions.length;
+  stopSpeech();
+  document.getElementById('q-prog-text').textContent = `Question ${qIdx+1} of ${total}`;
+  document.getElementById('q-score-text').textContent = `Score: ${score}`;
+  document.getElementById('q-prog-fill').style.width = ((qIdx/total)*100)+'%';
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-label').textContent = 'Solve this:';
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  answered = false;
+  // Start per-question timer in test mode (30s)
+  if(currentMode==='test') startTimer(30);
+  // Auto-speak question
+  setTimeout(()=>speakQuestion(), 400);
+  const opts = [q.a, ...q.w.slice(0,3)].sort(()=>Math.random()-0.5);
+  const grid = document.getElementById('ans-grid'); grid.innerHTML='';
+  opts.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'ans-btn';
+    btn.textContent = opt;
+    btn.onclick = ()=>pickAnswer(btn, opt, q.a, opts);
+    grid.appendChild(btn);
+  });
+}
+
+function pickAnswer(btn, chosen, correct, all){
+  if(answered) return;
+  clearTimer();
+  stopSpeech();
+  answered = true;
+  const isRight = (String(chosen)===String(correct) || parseFloat(chosen)===parseFloat(correct));
+  document.querySelectorAll('.ans-btn').forEach(b=>{
+    b.disabled=true;
+    if(parseFloat(b.textContent)===parseFloat(correct)||b.textContent===String(correct)) b.classList.add('correct');
+  });
+  const fb = document.getElementById('feedback');
+  if(isRight){
+    score++;
+    btn.classList.add('correct');
+    fb.className = 'feedback ok';
+    const msgs = ['🎉 Excellent! Keep it up!','✅ Correct! You\'re on fire!','⭐ Perfect!','🌟 Great job!'];
+    fb.textContent = msgs[rand(0,3)];
+    playSound('correct');
+    speakFeedback('Correct! Great job!');
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'feedback bad';
+    fb.textContent = `❌ Not quite. The answer is ${correct}. Keep practicing!`;
+    playSound('wrong');
+    speakFeedback(`Not quite. The answer is ${correct}.`);
+  }
+  fb.style.display = 'block';
+  const nb = document.getElementById('next-btn');
+  if(qIdx < questions.length-1){ nb.style.display='block'; }
+  else { setTimeout(()=>showResults(), 1400); }
+}
+
+function nextQ(){ qIdx++; loadQuestion(); }
+
+// ═══════════════════ RESULTS ═══════════════════
+function showResults(){
+  clearTimer(); stopSpeech();
+  quizElapsed = Math.round((Date.now() - quizStartTime) / 1000);
+  const total=questions.length;
+  const pct=Math.round((score/total)*100);
+  const ring=document.getElementById('res-ring');
+  ring.className='result-ring '+(pct>=80?'great':pct>=60?'ok':'retry');
+  document.getElementById('res-pct').style.color=pct>=80?'#2E7D32':pct>=60?'#E65100':'#C62828';
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('res-msg').textContent=pct>=80?'🏆 Outstanding!':pct>=60?'💪 Good effort!':'📚 Keep practicing!';
+  document.getElementById('res-sub').textContent=`${score} out of ${total} correct in "${currentTopic.name}"`;
+  // Show time row for test mode
+  const tr = document.getElementById('res-time-row');
+  const tv = document.getElementById('res-time-val');
+  if(currentMode==='test' && tr && tv){
+    const mins = Math.floor(quizElapsed/60);
+    const secs = quizElapsed % 60;
+    tv.textContent = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    tr.style.display='block';
+  } else if(tr){ tr.style.display='none'; }
+  if(pct>=80) confetti();
+  // Speak result
+  setTimeout(()=>speakFeedback(pct>=80?'Outstanding! You scored '+pct+' percent!':pct>=60?'Good effort! You scored '+pct+' percent. Keep going!':'Keep practicing! You scored '+pct+' percent. You\'ll get better!'), 500);
+  showScreen('screen-results');
+}
+
+// ═══════════════════ LEADERBOARD ═══════════════════
+function buildLeaderboard(){
+  const colors=['#FFD700','#90A4AE','#FF8A65'];
+  const podium=document.getElementById('lb-podium');
+  const order=[1,0,2];
+  podium.innerHTML='';
+  const barH=[80,60,44];
+  order.forEach((i,pos)=>{
+    const p=LEADERBOARD[i];
+    const place=pos===0?2:pos===1?1:3;
+    const div=document.createElement('div');
+    div.className='podium-place place-'+place;
+    const init=p.name.split(' ').map(x=>x[0]).join('');
+    div.innerHTML=`
+      <div style="font-size:20px">${place===1?'🥇':place===2?'🥈':'🥉'}</div>
+      <div class="podium-avatar" style="background:${p.av};width:${place===1?56:44}px;height:${place===1?56:44}px;font-size:${place===1?20:16}px">${init}</div>
+      <div class="podium-name">${p.name.split(' ')[0]}</div>
+      <div class="podium-score">${p.pts.toLocaleString()}</div>
+      <div class="podium-bar" style="background:${colors[place-1]};height:${barH[place-1]}px;width:${place===1?80:70}px;"></div>
+    `;
+    podium.appendChild(div);
+  });
+  const list=document.getElementById('lb-list'); list.innerHTML='';
+  LEADERBOARD.slice(3).forEach((p,i)=>{
+    const init=p.name.split(' ').map(x=>x[0]).join('');
+    const div=document.createElement('div'); div.className='lb-row animate-slide'; div.style.animationDelay=(i*0.05)+'s';
+    div.innerHTML=`<div class="lb-rank">${i+4}</div><div class="lb-av" style="background:${p.av}">${init}</div><div class="lb-info"><div class="lb-uname">${p.name}</div><div class="lb-grade">${p.grade} · ${CURR_LABELS[p.curr].split(' ')[0]}</div></div><div style="text-align:right"><div class="lb-pts">${p.pts.toLocaleString()} pts</div><div style="font-size:12px;color:var(--text3)">🔥 ${p.streak} days</div></div>`;
+    list.appendChild(div);
+  });
+}
+
+// ═══════════════════ AUTH ═══════════════════
+let signupRole='student';
+function selectRole(r){
+  signupRole=r;
+  ['student','parent','teacher'].forEach(x=>{
+    document.getElementById('role-'+x).classList.toggle('active',x===r);
+  });
+  document.getElementById('grade-field').style.display=r==='student'?'block':'none';
+}
+function switchLoginTab(tab){
+  document.getElementById('tab-signin').classList.toggle('active',tab==='signin');
+  document.getElementById('tab-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('login-form-signin').style.display=tab==='signin'?'block':'none';
+  document.getElementById('login-form-signup').style.display=tab==='signup'?'block':'none';
+}
+function doLogin(){
+  const u=document.getElementById('si-user').value.trim()||'student@math.com';
+  const isParent=u.includes('parent');
+  const name=isParent?'Parent':'Alex';
+  currentUser={name,role:isParent?'parent':'student',grade:'5'};
+  updateAvatars();
+  if(isParent){buildActivities();showScreen('screen-parent');}
+  else{showScreen('screen-home');}
+  document.getElementById('nav-login').style.display='none';
+  document.getElementById('nav-avatar').style.display='flex';
+  document.getElementById('nav-avatar').textContent=name[0];
+}
+function doSignup(){
+  const name=document.getElementById('su-name').value||'Student';
+  currentUser={name,role:signupRole,grade:document.getElementById('su-grade').value};
+  updateAvatars();
+  if(signupRole==='parent'){buildActivities();showScreen('screen-parent');}
+  else{showScreen('screen-home');}
+  document.getElementById('nav-login').style.display='none';
+  document.getElementById('nav-avatar').style.display='flex';
+  document.getElementById('nav-avatar').textContent=name[0];
+}
+function doLogout(){currentUser=null;document.getElementById('nav-login').style.display='block';document.getElementById('nav-avatar').style.display='none';showScreen('screen-home');}
+function updateAvatars(){
+  if(!currentUser)return;
+  const init=currentUser.name[0];
+  ['nav-avatar','topic-avatar','mode-avatar','learn-avatar'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.style.display='flex';el.textContent=init;}
+  });
+}
+function toggleUserMenu(){if(currentUser)doLogout();}
+function buildActivities(){
+  const list=document.getElementById('activity-list'); if(!list)return;
+  list.innerHTML='';
+  ACTIVITIES.forEach(a=>{
+    const div=document.createElement('div'); div.className='activity-row';
+    const scoreHtml=a.score!=null?`<div class="act-score ${a.score>=80?'hi':a.score>=60?'mid':'lo'}">${a.score}%</div>`:'<div class="act-score" style="color:var(--text3)">—</div>';
+    div.innerHTML=`<div class="act-icon">${a.icon}</div><div class="act-info"><div class="act-topic">${a.topic}</div><div class="act-detail">${a.detail} · ${a.when}</div></div>${scoreHtml}`;
+    list.appendChild(div);
+  });
+}
+
+// ═══════════════════ SCREEN MANAGER ═══════════════════
+function showScreen(id){
+  if(id !== 'screen-quiz'){ clearTimer(); stopSpeech(); }
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='screen-leaderboard') buildLeaderboard();
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════ CONFETTI ═══════════════════
+function confetti(){
+  const c=document.getElementById('confetti'); c.style.display='block'; c.innerHTML='';
+  const colors=['#6C63FF','#FF6584','#43D9AD','#FFD700','#FF9F1C','#A78BFA'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div'); p.className='confetti-piece';
+    p.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;border-radius:${Math.random()>0.5?'50%':'2px'}`;
+    c.appendChild(p);
+  }
+  setTimeout(()=>c.style.display='none',3500);
+}
+
+// ═══════════════════ UTILS ═══════════════════
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+
+// ═══════════════════ INIT ═══════════════════
+buildGradeGrids();
+applyLang();
+// Sync lang selects
+document.getElementById('lang-select2').innerHTML=document.getElementById('lang-select').innerHTML;
+</script>
+</body>
+</html>
