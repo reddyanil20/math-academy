@@ -660,21 +660,23 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   </nav>
 
   <div class="tutor-body" id="tutor-body">
-    <!-- API key banner (shown until key is set) -->
+    <!-- API key banner -->
     <div class="api-key-banner" id="api-key-banner">
       <div class="ak-icon">🔑</div>
       <div style="flex:1;">
-        <strong>Enter your FREE Google Gemini API Key to activate the AI Tutor</strong><br>
-        100% free — no credit card needed. Get your key in 2 minutes:
-        <ol style="margin:6px 0 6px 16px;font-size:12px;line-height:1.8;">
-          <li>Go to <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#E65100;font-weight:700;">aistudio.google.com/app/apikey</a></li>
-          <li>Sign in with your Google account</li>
-          <li>Click <strong>"Create API key"</strong></li>
-          <li>Copy the key and paste it below</li>
+        <strong>Get your FREE OpenRouter API Key — works instantly, no credit card!</strong><br>
+        <ol style="margin:8px 0 8px 16px;font-size:12px;line-height:2;">
+          <li>Go to <a href="https://openrouter.ai/keys" target="_blank" style="color:#E65100;font-weight:700;">openrouter.ai/keys</a></li>
+          <li>Click <strong>"Sign in"</strong> → use Google or GitHub account</li>
+          <li>Click <strong>"Create Key"</strong> → give it any name (e.g. MathStar)</li>
+          <li>Copy the key that appears (starts with <strong>sk-or-...</strong>)</li>
+          <li>Paste it below and click <strong>Save Key ✓</strong></li>
         </ol>
-        Your key is saved in your browser only — never sent anywhere else.
+        <div style="background:#FFF8E1;border-radius:6px;padding:6px 10px;font-size:11px;color:#BF360C;margin-bottom:8px;">
+          ✅ Truly free — no billing, no credit card, no limits for normal use
+        </div>
         <div class="api-key-input-row">
-          <input type="password" id="api-key-input" placeholder="AIza..." />
+          <input type="password" id="api-key-input" placeholder="sk-or-v1-..." />
           <button onclick="saveApiKey()">Save Key ✓</button>
         </div>
       </div>
@@ -1438,19 +1440,24 @@ function confetti(){
   setTimeout(()=>c.style.display='none',3500);
 }
 
-// ═══════════════════ AI TUTOR — Google Gemini (FREE) ═══════════════════
+// ═══════════════════ AI TUTOR — OpenRouter (FREE) ═══════════════════
 let chatHistory = [];
-let tutorApiKey = localStorage.getItem('mathstar_gemini_key') || '';
+let tutorApiKey = localStorage.getItem('mathstar_or_key') || '';
 let isTutorLoading = false;
+
+// OpenRouter free model — no billing needed
+// openrouter/free automatically picks the best available free model — never breaks!
+const OR_MODEL = 'openrouter/free';
+const OR_URL   = 'https://openrouter.ai/api/v1/chat/completions';
 
 function saveApiKey(){
   const val = document.getElementById('api-key-input').value.trim();
-  if(!val.startsWith('AIza') || val.length < 20){
-    alert('That key doesn\'t look right.\nIt should start with "AIza" and be ~39 chars.\n\nGet yours free at: aistudio.google.com/app/apikey');
+  if(!val.startsWith('sk-or-') || val.length < 20){
+    alert('That key doesn\'t look right.\nIt should start with "sk-or-..." \n\nGet yours free (no card needed) at:\nopenrouter.ai/keys');
     return;
   }
   tutorApiKey = val;
-  localStorage.setItem('mathstar_gemini_key', val);
+  localStorage.setItem('mathstar_or_key', val);
   document.getElementById('api-key-banner').style.display = 'none';
   appendAIWelcome();
 }
@@ -1506,12 +1513,11 @@ function appendMessage(role, text){
   const initials = isAI ? '🤖' : (currentUser ? currentUser.name[0] : '👤');
   const div = document.createElement('div');
   div.className = 'msg '+(isAI?'':'user');
-  const safeText = text.replace(/'/g,"\\'").replace(/\n/g,' ').substring(0,400);
   div.innerHTML =
     '<div class="msg-avatar '+(isAI?'ai':'user')+'">'+initials+'</div>'+
     '<div class="msg-bubble '+(isAI?'ai':'user')+'">'+
       (isAI ? formatAIResponse(text) : '<p>'+escapeHtml(text)+'</p>')+
-      (isAI ? '<button class="speak-ans-btn" onclick=\'speakTutorText(this,decodeURIComponent(this.dataset.t))\' data-t=\''+encodeURIComponent(text.substring(0,500))+'\'> 🔊 Listen</button>' : '')+
+      (isAI ? '<button class="speak-ans-btn" onclick="speakTutorText(this,decodeURIComponent(this.dataset.t))" data-t="'+encodeURIComponent(text.substring(0,500))+'"> 🔊 Listen</button>' : '')+
     '</div>';
   container.appendChild(div);
   scrollTutorBottom();
@@ -1536,6 +1542,7 @@ function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 
 function showTyping(){
   const c=document.getElementById('chat-messages'); if(!c) return;
+  const old=document.getElementById('typing-indicator'); if(old) old.remove();
   const d=document.createElement('div'); d.className='msg'; d.id='typing-indicator';
   d.innerHTML='<div class="msg-avatar ai">🤖</div><div class="msg-bubble ai"><div class="typing-dot"><span></span><span></span><span></span></div></div>';
   c.appendChild(d); scrollTutorBottom();
@@ -1548,6 +1555,49 @@ function scrollTutorBottom(){
   if(b) setTimeout(()=>{ b.scrollTop=b.scrollHeight; },50);
 }
 
+function showRetryCountdown(seconds, attemptNum, maxAttempts){
+  return new Promise(resolve=>{
+    const c=document.getElementById('chat-messages'); if(!c){setTimeout(resolve,seconds*1000);return;}
+    const old=document.getElementById('typing-indicator'); if(old) old.remove();
+    const d=document.createElement('div'); d.className='msg'; d.id='typing-indicator';
+    d.innerHTML=
+      '<div class="msg-avatar ai">🤖</div>'+
+      '<div class="msg-bubble ai" style="min-width:210px;">'+
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">⏳ Busy — auto-retrying in <strong><span id="retry-countdown">'+seconds+'</span>s</strong></div>'+
+        '<div style="font-size:11px;color:var(--text3);">Attempt '+attemptNum+' of '+maxAttempts+'</div>'+
+        '<div style="height:4px;background:#E0E0F0;border-radius:2px;margin-top:8px;overflow:hidden;">'+
+          '<div id="retry-bar" style="height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:100%;border-radius:2px;transition:width '+seconds+'s linear;"></div>'+
+        '</div>'+
+      '</div>';
+    c.appendChild(d); scrollTutorBottom();
+    setTimeout(()=>{ const bar=document.getElementById('retry-bar'); if(bar) bar.style.width='0%'; },50);
+    let rem=seconds;
+    const tick=setInterval(()=>{
+      rem--;
+      const el=document.getElementById('retry-countdown'); if(el) el.textContent=rem;
+      if(rem<=0){ clearInterval(tick); setTimeout(resolve,200); }
+    },1000);
+  });
+}
+
+async function callOpenRouter(messages){
+  return fetch(OR_URL,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+tutorApiKey,
+      'HTTP-Referer': window.location.href,
+      'X-Title':'MathStar Academy'
+    },
+    body:JSON.stringify({
+      model: OR_MODEL,
+      messages: messages,
+      max_tokens: 900,
+      temperature: 0.7
+    })
+  });
+}
+
 async function sendTutorMessage(){
   const input=document.getElementById('tutor-input');
   const text=input.value.trim();
@@ -1557,6 +1607,7 @@ async function sendTutorMessage(){
     document.getElementById('api-key-input').focus();
     return;
   }
+
   appendMessage('user',text);
   input.value=''; input.style.height='auto';
   const hero=document.getElementById('tutor-hero'); if(hero) hero.style.display='none';
@@ -1567,54 +1618,33 @@ async function sendTutorMessage(){
   const gradeCtx = currentUser ? 'The student is in Grade '+currentUser.grade+'.' : '';
   const topicCtx = currentTopic ? 'They are studying "'+currentTopic.name+'" — '+currentTopic.desc+'.' : '';
   const currCtx  = 'Curriculum: '+(CURR_LABELS[activeCurriculum]||'General')+'.';
-  const systemInstruction = 'You are MathStar Tutor, a friendly AI Math Tutor for K-12 students. '+gradeCtx+' '+topicCtx+' '+currCtx+' Rules: explain step by step with numbered steps, use age-appropriate language, put math in backticks like `2+3=5`, use **bold** for key terms, give real-world examples, never just give the answer — show working, end with encouragement, keep answers concise and engaging.';
+  const systemPrompt = 'You are MathStar Tutor, a warm and encouraging AI Math Tutor for K-12 students. '+gradeCtx+' '+topicCtx+' '+currCtx+' Always explain step by step with numbered steps. Use age-appropriate simple language. Put math expressions in backticks like `2+3=5`. Use **bold** for key terms. Give a real-world example. Never just give the answer — always show the working. End with encouragement or a check question. Keep answers concise and engaging — not too long.';
 
-  const geminiHistory = chatHistory.slice(-8).map(m=>({
-    role: m.role==='assistant'?'model':'user',
-    parts:[{text:m.content}]
-  }));
+  const messages = [
+    {role:'system', content: systemPrompt},
+    ...chatHistory.slice(-8).map(m=>({role: m.role==='assistant'?'assistant':'user', content: m.content})),
+    {role:'user', content: text}
+  ];
 
-  const payload = {
-    contents:[
-      ...geminiHistory,
-      {role:'user',parts:[{text:systemInstruction+'\n\nStudent: '+text}]}
-    ],
-    generationConfig:{temperature:0.7,maxOutputTokens:900,topP:0.9}
-  };
-
-  // Auto-retry up to 3 times on 429 with countdown
   const MAX_RETRIES = 3;
-  const RETRY_DELAYS = [8, 15, 25]; // seconds to wait before each retry
+  const RETRY_DELAYS = [5, 10, 20];
 
-  for(let attempt = 0; attempt <= MAX_RETRIES; attempt++){
-    try {
-      const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+tutorApiKey;
-      const res = await fetch(url,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(payload)
-      });
+  for(let attempt=0; attempt<=MAX_RETRIES; attempt++){
+    try{
+      const res = await callOpenRouter(messages);
 
-      if(res.status === 429){
+      if(res.status===429 || res.status===503){
         if(attempt < MAX_RETRIES){
-          const waitSecs = RETRY_DELAYS[attempt];
-          // Update typing indicator to show countdown
-          await showRetryCountdown(waitSecs, attempt+1, MAX_RETRIES);
-          showTyping(); // restore typing dots after countdown
-          continue; // retry
+          await showRetryCountdown(RETRY_DELAYS[attempt], attempt+1, MAX_RETRIES);
+          showTyping();
+          continue;
         } else {
-          // All retries exhausted
           removeTyping();
           appendMessage('ai',
-            '⏳ **Google\'s free limit reached for now.**\n\n' +
-            'This happens because the free Gemini tier allows only ~15 requests per minute.\n\n' +
-            '**To fix this permanently — 3 options:**\n\n' +
-            '1. **Wait 1 minute** then ask your question again — the limit resets automatically\n' +
-            '2. **Upgrade to a paid Gemini key** at aistudio.google.com (very cheap — $0.075 per 1M tokens)\n' +
-            '3. **Get a second free key** — create a new key in a different Google account and paste it here\n\n' +
-            'Your question has been saved — just hit send again in a moment! 😊'
+            '⏳ **The AI server is busy right now.**\n\n'+
+            'Your question has been saved — please try again in about a minute.\n\n'+
+            '**Tip:** OpenRouter free models can get busy at peak times. If this keeps happening, try at a different time of day.'
           );
-          // Put the question back in the input box so student doesn't lose it
           document.getElementById('tutor-input').value = text;
           break;
         }
@@ -1624,19 +1654,21 @@ async function sendTutorMessage(){
 
       if(!res.ok){
         const err=await res.json().catch(()=>({}));
-        const msg=err?.error?.message||'';
-        if(res.status===400||res.status===403){
-          appendMessage('ai','🔑 API key error. Make sure your key is from aistudio.google.com/app/apikey and starts with "AIza".\n\nFull error: '+msg);
+        const msg=err?.error?.message||JSON.stringify(err)||'unknown error';
+        if(res.status===401){
+          appendMessage('ai','🔑 **Invalid API key.** Please check your key — it should start with `sk-or-...`\n\nGet a free key at openrouter.ai/keys');
+        } else if(res.status===402){
+          appendMessage('ai','💳 **Credits needed.** Go to openrouter.ai/credits to add free credits (no payment needed for free models).');
         } else {
-          appendMessage('ai','❌ Error '+res.status+': '+(msg||'unknown error')+'. Please try again!');
+          appendMessage('ai','❌ Error '+res.status+': '+msg+'\n\nPlease try again!');
         }
         break;
       }
 
-      const data=await res.json();
-      const aiText=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      const data = await res.json();
+      const aiText = data?.choices?.[0]?.message?.content;
       if(!aiText){
-        appendMessage('ai',"🤔 No response generated. Try rephrasing your question!");
+        appendMessage('ai','🤔 No response received. Please try rephrasing your question!');
       } else {
         chatHistory.push({role:'user',content:text});
         chatHistory.push({role:'assistant',content:aiText});
@@ -1645,11 +1677,11 @@ async function sendTutorMessage(){
           setTimeout(()=>speakFeedback(aiText.replace(/[*#`•]/g,'').substring(0,250)),600);
         }
       }
-      break; // success — exit retry loop
+      break;
 
     } catch(e){
       removeTyping();
-      appendMessage('ai','🌐 Network error — check your internet and try again.');
+      appendMessage('ai','🌐 Network error — please check your internet connection and try again.');
       console.error('Tutor error:',e);
       break;
     }
@@ -1658,38 +1690,6 @@ async function sendTutorMessage(){
   isTutorLoading=false;
   document.getElementById('tutor-send-btn').disabled=false;
   document.getElementById('tutor-input').focus();
-}
-
-// Shows a live countdown in the typing bubble, resolves when done
-function showRetryCountdown(seconds, attemptNum, maxAttempts){
-  return new Promise(resolve => {
-    const c = document.getElementById('chat-messages'); if(!c) { setTimeout(resolve, seconds*1000); return; }
-    // Remove old typing indicator if any
-    const old = document.getElementById('typing-indicator'); if(old) old.remove();
-    const d = document.createElement('div');
-    d.className='msg'; d.id='typing-indicator';
-    d.innerHTML =
-      '<div class="msg-avatar ai">🤖</div>'+
-      '<div class="msg-bubble ai" style="min-width:200px;">'+
-        '<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">⏳ Rate limit hit — auto-retrying in <strong><span id="retry-countdown">'+seconds+'</span>s</strong></div>'+
-        '<div style="font-size:11px;color:var(--text3);">Attempt '+attemptNum+' of '+maxAttempts+'</div>'+
-        '<div style="height:4px;background:#E0E0F0;border-radius:2px;margin-top:8px;overflow:hidden;">'+
-          '<div id="retry-bar" style="height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:100%;border-radius:2px;transition:width '+seconds+'s linear;"></div>'+
-        '</div>'+
-      '</div>';
-    c.appendChild(d);
-    scrollTutorBottom();
-    // Animate bar shrinking
-    setTimeout(()=>{ const bar=document.getElementById('retry-bar'); if(bar) bar.style.width='0%'; },50);
-    // Tick countdown
-    let remaining = seconds;
-    const tick = setInterval(()=>{
-      remaining--;
-      const el = document.getElementById('retry-countdown');
-      if(el) el.textContent = remaining;
-      if(remaining <= 0){ clearInterval(tick); setTimeout(resolve, 200); }
-    }, 1000);
-  });
 }
 
 function clearChat(){
