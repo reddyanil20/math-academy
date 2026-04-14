@@ -295,6 +295,49 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .animate-pop{animation:pop 0.35s ease both;}
 .animate-slide{animation:slide-up 0.3s ease both;}
 
+/* ── AI TUTOR ── */
+.tutor-screen{display:flex;flex-direction:column;height:100vh;}
+.tutor-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px;}
+.tutor-input-row{padding:12px 16px;background:var(--card);border-top:1.5px solid var(--border);display:flex;gap:10px;align-items:flex-end;}
+.tutor-textarea{flex:1;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--font-body);font-size:14px;color:var(--text);background:var(--bg);resize:none;outline:none;transition:border-color 0.2s;max-height:120px;line-height:1.5;}
+.tutor-textarea:focus{border-color:var(--primary);}
+.tutor-send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
+.tutor-send:hover{transform:scale(1.08);}
+.tutor-send:disabled{background:#C0B8FF;cursor:not-allowed;transform:none;}
+.tutor-send svg{width:18px;height:18px;fill:#fff;}
+.msg{display:flex;gap:10px;align-items:flex-start;animation:slide-up 0.25s ease both;}
+.msg.user{flex-direction:row-reverse;}
+.msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;font-weight:800;}
+.msg-avatar.ai{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;}
+.msg-avatar.user{background:linear-gradient(135deg,var(--secondary),#FF9F1C);color:#fff;}
+.msg-bubble{max-width:82%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.7;}
+.msg-bubble.ai{background:var(--card);border:1.5px solid var(--border);color:var(--text);border-bottom-left-radius:4px;}
+.msg-bubble.user{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-bottom-right-radius:4px;}
+.msg-bubble.ai h3{font-family:var(--font-head);font-size:15px;font-weight:700;margin-bottom:6px;color:var(--primary);}
+.msg-bubble.ai strong{font-weight:700;color:var(--text);}
+.msg-bubble.ai ul,.msg-bubble.ai ol{margin:6px 0 6px 18px;}
+.msg-bubble.ai li{margin-bottom:4px;}
+.msg-bubble.ai .math-block{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--font-head);font-size:15px;margin:8px 0;color:var(--primary);font-weight:700;}
+.msg-bubble.ai .step-block{background:#F0EEFF;border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:8px 12px;margin:6px 0;font-size:13px;}
+.typing-dot{display:flex;align-items:center;gap:5px;padding:14px 16px;}
+.typing-dot span{width:8px;height:8px;border-radius:50%;background:var(--text3);animation:typing-bounce 1.2s ease-in-out infinite;}
+.typing-dot span:nth-child(2){animation-delay:0.2s;}
+.typing-dot span:nth-child(3){animation-delay:0.4s;}
+@keyframes typing-bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
+.quick-chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 14px;}
+.chip{padding:8px 14px;border-radius:50px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:700;color:var(--primary);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.chip:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+.tutor-hero{background:linear-gradient(135deg,#6C63FF,#A78BFA);border-radius:var(--radius);padding:20px;text-align:center;color:#fff;margin-bottom:4px;}
+.tutor-hero h2{font-family:var(--font-head);font-size:20px;font-weight:800;margin-bottom:4px;}
+.tutor-hero p{font-size:13px;opacity:0.88;}
+.api-key-banner{background:#FFF3E0;border:1.5px solid #FFB74D;border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px;font-size:13px;color:#E65100;display:flex;align-items:flex-start;gap:10px;}
+.api-key-banner .ak-icon{font-size:20px;flex-shrink:0;}
+.api-key-input-row{display:flex;gap:8px;margin-top:8px;}
+.api-key-input-row input{flex:1;padding:8px 12px;border:1.5px solid #FFB74D;border-radius:8px;font-size:13px;font-family:var(--font-body);outline:none;background:#FFF8E1;}
+.api-key-input-row button{padding:8px 14px;border-radius:8px;background:#E65100;color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;}
+.speak-ans-btn{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px;border:1px solid var(--border);border-radius:20px;background:transparent;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;transition:all 0.2s;}
+.speak-ans-btn:hover{color:var(--primary);border-color:var(--primary);}
+
 /* ── CONFETTI ── */
 .confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
 .confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;}
@@ -316,6 +359,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <option value="es">🇪🇸 Español</option>
       </select>
       <button class="nav-btn" onclick="showScreen('screen-leaderboard')" id="nav-lb">🏆 Board</button>
+      <button class="nav-btn" onclick="showScreen('screen-tutor')" style="background:linear-gradient(135deg,#6C63FF,#A78BFA);color:#fff;border-color:transparent;" id="nav-tutor">🤖 AI Tutor</button>
       <button class="nav-btn primary" onclick="showScreen('screen-login')" id="nav-login">Sign In</button>
       <div class="avatar" id="nav-avatar" style="display:none" onclick="toggleUserMenu()">A</div>
     </div>
@@ -420,7 +464,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 <div class="screen" id="screen-mode">
   <nav class="topnav">
     <div class="logo"><span class="logo-star">⭐</span> MathStar</div>
-    <div class="nav-right"><div class="avatar" id="mode-avatar">A</div></div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="showScreen('screen-tutor')" style="background:linear-gradient(135deg,#6C63FF,#A78BFA);color:#fff;border-color:transparent;font-size:12px;">🤖 Ask AI</button>
+      <div class="avatar" id="mode-avatar">A</div>
+    </div>
   </nav>
   <div class="back-row" onclick="showScreen('screen-topics')">← <span id="mode-back-lbl">Back to Topics</span></div>
   <div class="section">
@@ -539,6 +586,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     <div class="result-actions">
       <button class="r-btn primary" onclick="startQuiz(currentMode)">Try Again 🔄</button>
       <button class="r-btn" onclick="showScreen('screen-mode')">Different Mode</button>
+      <button class="r-btn" onclick="openTutorFromResult()">🤖 Ask AI Tutor</button>
       <button class="r-btn" onclick="showScreen('screen-home')">Pick New Topic 🏠</button>
     </div>
   </div>
@@ -597,6 +645,71 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <div style="font-weight:800;font-size:15px;margin-bottom:12px;">📋 Recent Activity</div>
       <div class="activity-list" id="activity-list"></div>
     </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ AI TUTOR ════════════════════════════════════ -->
+<div class="screen tutor-screen" id="screen-tutor">
+  <nav class="topnav">
+    <div class="logo"><span class="logo-star">🤖</span> AI Math Tutor</div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="clearChat()" title="Clear conversation">🗑 Clear</button>
+      <button class="nav-btn" onclick="showScreen('screen-home')">🏠 Home</button>
+      <div class="avatar" id="tutor-avatar" style="display:none">A</div>
+    </div>
+  </nav>
+
+  <div class="tutor-body" id="tutor-body">
+    <!-- API key banner (shown until key is set) -->
+    <div class="api-key-banner" id="api-key-banner">
+      <div class="ak-icon">🔑</div>
+      <div style="flex:1;">
+        <strong>Enter your FREE Google Gemini API Key to activate the AI Tutor</strong><br>
+        100% free — no credit card needed. Get your key in 2 minutes:
+        <ol style="margin:6px 0 6px 16px;font-size:12px;line-height:1.8;">
+          <li>Go to <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#E65100;font-weight:700;">aistudio.google.com/app/apikey</a></li>
+          <li>Sign in with your Google account</li>
+          <li>Click <strong>"Create API key"</strong></li>
+          <li>Copy the key and paste it below</li>
+        </ol>
+        Your key is saved in your browser only — never sent anywhere else.
+        <div class="api-key-input-row">
+          <input type="password" id="api-key-input" placeholder="AIza..." />
+          <button onclick="saveApiKey()">Save Key ✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welcome hero -->
+    <div class="tutor-hero" id="tutor-hero">
+      <div style="font-size:36px;margin-bottom:8px;">🧮</div>
+      <h2>Hi! I'm your AI Math Tutor</h2>
+      <p>Ask me anything — I'll explain step by step in a way that makes sense for your grade level.</p>
+    </div>
+
+    <!-- Message history -->
+    <div id="chat-messages"></div>
+  </div>
+
+  <!-- Quick question chips -->
+  <div class="quick-chips" id="quick-chips">
+    <div class="chip" onclick="sendChip(this)">What is a fraction?</div>
+    <div class="chip" onclick="sendChip(this)">Explain multiplication</div>
+    <div class="chip" onclick="sendChip(this)">How do I solve x + 5 = 12?</div>
+    <div class="chip" onclick="sendChip(this)">What is Pythagoras?</div>
+    <div class="chip" onclick="sendChip(this)">How do derivatives work?</div>
+    <div class="chip" onclick="sendChip(this)">Explain pi 🥧</div>
+  </div>
+
+  <!-- Input bar -->
+  <div class="tutor-input-row">
+    <textarea class="tutor-textarea" id="tutor-input" rows="1"
+      placeholder="Ask any math question… e.g. Why does 2+2=4? How do I find area?"
+      onkeydown="handleTutorKey(event)"
+      oninput="autoResizeTextarea(this)"></textarea>
+    <button class="tutor-send" id="tutor-send-btn" onclick="sendTutorMessage()">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
   </div>
 </div>
 
@@ -1309,6 +1422,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if(id==='screen-leaderboard') buildLeaderboard();
+  if(id==='screen-tutor') initTutorScreen();
   window.scrollTo(0,0);
 }
 
@@ -1324,7 +1438,219 @@ function confetti(){
   setTimeout(()=>c.style.display='none',3500);
 }
 
-// ═══════════════════ UTILS ═══════════════════
+// ═══════════════════ AI TUTOR — Google Gemini (FREE) ═══════════════════
+let chatHistory = [];
+let tutorApiKey = localStorage.getItem('mathstar_gemini_key') || '';
+let isTutorLoading = false;
+
+function saveApiKey(){
+  const val = document.getElementById('api-key-input').value.trim();
+  if(!val.startsWith('AIza') || val.length < 20){
+    alert('That key doesn\'t look right.\nIt should start with "AIza" and be ~39 chars.\n\nGet yours free at: aistudio.google.com/app/apikey');
+    return;
+  }
+  tutorApiKey = val;
+  localStorage.setItem('mathstar_gemini_key', val);
+  document.getElementById('api-key-banner').style.display = 'none';
+  appendAIWelcome();
+}
+
+function initTutorScreen(){
+  const av = document.getElementById('tutor-avatar');
+  if(currentUser && av){ av.style.display='flex'; av.textContent=currentUser.name[0]; }
+  const banner = document.getElementById('api-key-banner');
+  if(tutorApiKey && banner){ banner.style.display='none'; }
+  if(chatHistory.length === 0 && tutorApiKey){ appendAIWelcome(); }
+  updateQuickChips();
+}
+
+function appendAIWelcome(){
+  const grade = currentUser ? 'Grade '+currentUser.grade : 'your grade';
+  const topic = currentTopic ? currentTopic.name : 'any math topic';
+  const welcome = '👋 Hello! I am your personal AI Math Tutor.\n\nI can see you are studying **'+topic+'** at **'+grade+'** level. I am here to:\n\n• Explain any concept step by step\n• Solve example problems with you\n• Answer any math question\n• Help when you are stuck\n\nWhat would you like to learn today? 😊';
+  appendMessage('ai', welcome);
+}
+
+function updateQuickChips(){
+  const chips = document.getElementById('quick-chips');
+  if(!chips) return;
+  const base = currentTopic ? [
+    'Explain '+currentTopic.name+' simply',
+    'Give me a worked example of '+currentTopic.name,
+    'Why do we learn '+currentTopic.name+'?',
+    'Common mistakes in '+currentTopic.name+'?',
+    'Show me step by step',
+    'Give me a harder example'
+  ] : ['What is a fraction?','Explain multiplication','How do I solve x + 5 = 12?','What is Pythagoras?','How do derivatives work?','Explain pi'];
+  chips.innerHTML = base.map(c=>'<div class="chip" onclick="sendChip(this)">'+c+'</div>').join('');
+}
+
+function sendChip(el){
+  document.getElementById('tutor-input').value = el.textContent;
+  sendTutorMessage();
+}
+
+function handleTutorKey(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendTutorMessage(); }
+}
+
+function autoResizeTextarea(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+
+function appendMessage(role, text){
+  const container = document.getElementById('chat-messages');
+  if(!container) return;
+  const isAI = role==='ai';
+  const initials = isAI ? '🤖' : (currentUser ? currentUser.name[0] : '👤');
+  const div = document.createElement('div');
+  div.className = 'msg '+(isAI?'':'user');
+  const safeText = text.replace(/'/g,"\\'").replace(/\n/g,' ').substring(0,400);
+  div.innerHTML =
+    '<div class="msg-avatar '+(isAI?'ai':'user')+'">'+initials+'</div>'+
+    '<div class="msg-bubble '+(isAI?'ai':'user')+'">'+
+      (isAI ? formatAIResponse(text) : '<p>'+escapeHtml(text)+'</p>')+
+      (isAI ? '<button class="speak-ans-btn" onclick=\'speakTutorText(this,decodeURIComponent(this.dataset.t))\' data-t=\''+encodeURIComponent(text.substring(0,500))+'\'> 🔊 Listen</button>' : '')+
+    '</div>';
+  container.appendChild(div);
+  scrollTutorBottom();
+}
+
+function formatAIResponse(text){
+  let h = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<span class="math-block">$1</span>')
+    .replace(/^#{1,3}\s(.+)$/gm,'<h3>$1</h3>')
+    .replace(/^\d+\.\s(.+)$/gm,'<div class="step-block"><strong>↳</strong> $1</div>')
+    .replace(/^[•\-\*]\s(.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>')
+    .replace(/\n\n/g,'</p><p style="margin-top:8px;">')
+    .replace(/\n/g,'<br>');
+  return '<p>'+h+'</p>';
+}
+
+function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function showTyping(){
+  const c=document.getElementById('chat-messages'); if(!c) return;
+  const d=document.createElement('div'); d.className='msg'; d.id='typing-indicator';
+  d.innerHTML='<div class="msg-avatar ai">🤖</div><div class="msg-bubble ai"><div class="typing-dot"><span></span><span></span><span></span></div></div>';
+  c.appendChild(d); scrollTutorBottom();
+}
+
+function removeTyping(){ const t=document.getElementById('typing-indicator'); if(t) t.remove(); }
+
+function scrollTutorBottom(){
+  const b=document.getElementById('tutor-body');
+  if(b) setTimeout(()=>{ b.scrollTop=b.scrollHeight; },50);
+}
+
+async function sendTutorMessage(){
+  const input=document.getElementById('tutor-input');
+  const text=input.value.trim();
+  if(!text||isTutorLoading) return;
+  if(!tutorApiKey){
+    document.getElementById('api-key-banner').scrollIntoView({behavior:'smooth'});
+    document.getElementById('api-key-input').focus();
+    return;
+  }
+  appendMessage('user',text);
+  input.value=''; input.style.height='auto';
+  const hero=document.getElementById('tutor-hero'); if(hero) hero.style.display='none';
+  isTutorLoading=true;
+  document.getElementById('tutor-send-btn').disabled=true;
+  showTyping();
+
+  const gradeCtx = currentUser ? 'The student is in Grade '+currentUser.grade+'.' : '';
+  const topicCtx = currentTopic ? 'They are studying "'+currentTopic.name+'" — '+currentTopic.desc+'.' : '';
+  const currCtx  = 'Curriculum: '+(CURR_LABELS[activeCurriculum]||'General')+'.';
+  const systemInstruction = 'You are MathStar Tutor, a friendly AI Math Tutor for K-12 students. '+gradeCtx+' '+topicCtx+' '+currCtx+' Rules: explain step by step with numbered steps, use age-appropriate language, put math in backticks like `2+3=5`, use **bold** for key terms, give real-world examples, never just give the answer — show working, end with encouragement, keep answers concise and engaging.';
+
+  const geminiHistory = chatHistory.slice(-8).map(m=>({
+    role: m.role==='assistant'?'model':'user',
+    parts:[{text:m.content}]
+  }));
+
+  try {
+    const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+tutorApiKey;
+    const res = await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[
+          ...geminiHistory,
+          {role:'user',parts:[{text:systemInstruction+'\n\nStudent: '+text}]}
+        ],
+        generationConfig:{temperature:0.7,maxOutputTokens:900,topP:0.9}
+      })
+    });
+    removeTyping();
+    if(!res.ok){
+      const err=await res.json().catch(()=>({}));
+      const msg=err?.error?.message||'';
+      if(res.status===400||res.status===403){
+        appendMessage('ai','🔑 API key error. Make sure your key is from aistudio.google.com/app/apikey and starts with "AIza". Error: '+msg);
+      } else if(res.status===429){
+        appendMessage('ai','⏳ Too many questions! Wait a few seconds and try again. (Google free tier rate limit — resets quickly.)');
+      } else {
+        appendMessage('ai','❌ Error '+res.status+': '+msg+'. Please try again!');
+      }
+    } else {
+      const data=await res.json();
+      const aiText=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if(!aiText){
+        appendMessage('ai',"🤔 No response generated. Try rephrasing your question!");
+      } else {
+        chatHistory.push({role:'user',content:text});
+        chatHistory.push({role:'assistant',content:aiText});
+        appendMessage('ai',aiText);
+        if(currentUser && parseInt(currentUser.grade)<=3){
+          setTimeout(()=>speakFeedback(aiText.replace(/[*#`•]/g,'').substring(0,250)),600);
+        }
+      }
+    }
+  } catch(e){
+    removeTyping();
+    appendMessage('ai','🌐 Network error — check your internet and try again.');
+    console.error('Tutor error:',e);
+  }
+  isTutorLoading=false;
+  document.getElementById('tutor-send-btn').disabled=false;
+  document.getElementById('tutor-input').focus();
+}
+
+function clearChat(){
+  if(!confirm('Clear conversation and start fresh?')) return;
+  chatHistory=[];
+  document.getElementById('chat-messages').innerHTML='';
+  const hero=document.getElementById('tutor-hero'); if(hero) hero.style.display='block';
+  if(tutorApiKey) appendAIWelcome();
+}
+
+function openTutorFromResult(){
+  showScreen('screen-tutor');
+  if(currentTopic){
+    const pct=Math.round((score/questions.length)*100);
+    document.getElementById('tutor-input').value = pct<70
+      ? 'I just scored '+pct+'% on "'+currentTopic.name+'". Can you explain this topic clearly with examples?'
+      : 'I scored '+pct+'% on "'+currentTopic.name+'". Give me a more challenging problem!';
+  }
+}
+
+function speakTutorText(btn, text){
+  if(!window.speechSynthesis) return;
+  if(window.speechSynthesis.speaking){ window.speechSynthesis.cancel(); btn.textContent='🔊 Listen'; return; }
+  const u=new SpeechSynthesisUtterance(text.replace(/[*#`•]/g,''));
+  u.lang=LANG_SPEECH[LANG]||'en-US'; u.rate=0.9; u.pitch=1.1;
+  btn.textContent='⏹ Stop';
+  u.onend=()=>{ btn.textContent='🔊 Listen'; };
+  window.speechSynthesis.speak(u);
+}
+
+// ═══════════════════ END AI TUTOR ═══════════════════
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 
 // ═══════════════════ INIT ═══════════════════
