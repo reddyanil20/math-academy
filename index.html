@@ -1574,31 +1574,65 @@ async function sendTutorMessage(){
     parts:[{text:m.content}]
   }));
 
-  try {
-    const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+tutorApiKey;
-    const res = await fetch(url,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        contents:[
-          ...geminiHistory,
-          {role:'user',parts:[{text:systemInstruction+'\n\nStudent: '+text}]}
-        ],
-        generationConfig:{temperature:0.7,maxOutputTokens:900,topP:0.9}
-      })
-    });
-    removeTyping();
-    if(!res.ok){
-      const err=await res.json().catch(()=>({}));
-      const msg=err?.error?.message||'';
-      if(res.status===400||res.status===403){
-        appendMessage('ai','🔑 API key error. Make sure your key is from aistudio.google.com/app/apikey and starts with "AIza". Error: '+msg);
-      } else if(res.status===429){
-        appendMessage('ai','⏳ Too many questions! Wait a few seconds and try again. (Google free tier rate limit — resets quickly.)');
-      } else {
-        appendMessage('ai','❌ Error '+res.status+': '+msg+'. Please try again!');
+  const payload = {
+    contents:[
+      ...geminiHistory,
+      {role:'user',parts:[{text:systemInstruction+'\n\nStudent: '+text}]}
+    ],
+    generationConfig:{temperature:0.7,maxOutputTokens:900,topP:0.9}
+  };
+
+  // Auto-retry up to 3 times on 429 with countdown
+  const MAX_RETRIES = 3;
+  const RETRY_DELAYS = [8, 15, 25]; // seconds to wait before each retry
+
+  for(let attempt = 0; attempt <= MAX_RETRIES; attempt++){
+    try {
+      const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+tutorApiKey;
+      const res = await fetch(url,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
+
+      if(res.status === 429){
+        if(attempt < MAX_RETRIES){
+          const waitSecs = RETRY_DELAYS[attempt];
+          // Update typing indicator to show countdown
+          await showRetryCountdown(waitSecs, attempt+1, MAX_RETRIES);
+          showTyping(); // restore typing dots after countdown
+          continue; // retry
+        } else {
+          // All retries exhausted
+          removeTyping();
+          appendMessage('ai',
+            '⏳ **Google\'s free limit reached for now.**\n\n' +
+            'This happens because the free Gemini tier allows only ~15 requests per minute.\n\n' +
+            '**To fix this permanently — 3 options:**\n\n' +
+            '1. **Wait 1 minute** then ask your question again — the limit resets automatically\n' +
+            '2. **Upgrade to a paid Gemini key** at aistudio.google.com (very cheap — $0.075 per 1M tokens)\n' +
+            '3. **Get a second free key** — create a new key in a different Google account and paste it here\n\n' +
+            'Your question has been saved — just hit send again in a moment! 😊'
+          );
+          // Put the question back in the input box so student doesn't lose it
+          document.getElementById('tutor-input').value = text;
+          break;
+        }
       }
-    } else {
+
+      removeTyping();
+
+      if(!res.ok){
+        const err=await res.json().catch(()=>({}));
+        const msg=err?.error?.message||'';
+        if(res.status===400||res.status===403){
+          appendMessage('ai','🔑 API key error. Make sure your key is from aistudio.google.com/app/apikey and starts with "AIza".\n\nFull error: '+msg);
+        } else {
+          appendMessage('ai','❌ Error '+res.status+': '+(msg||'unknown error')+'. Please try again!');
+        }
+        break;
+      }
+
       const data=await res.json();
       const aiText=data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if(!aiText){
@@ -1611,15 +1645,51 @@ async function sendTutorMessage(){
           setTimeout(()=>speakFeedback(aiText.replace(/[*#`•]/g,'').substring(0,250)),600);
         }
       }
+      break; // success — exit retry loop
+
+    } catch(e){
+      removeTyping();
+      appendMessage('ai','🌐 Network error — check your internet and try again.');
+      console.error('Tutor error:',e);
+      break;
     }
-  } catch(e){
-    removeTyping();
-    appendMessage('ai','🌐 Network error — check your internet and try again.');
-    console.error('Tutor error:',e);
   }
+
   isTutorLoading=false;
   document.getElementById('tutor-send-btn').disabled=false;
   document.getElementById('tutor-input').focus();
+}
+
+// Shows a live countdown in the typing bubble, resolves when done
+function showRetryCountdown(seconds, attemptNum, maxAttempts){
+  return new Promise(resolve => {
+    const c = document.getElementById('chat-messages'); if(!c) { setTimeout(resolve, seconds*1000); return; }
+    // Remove old typing indicator if any
+    const old = document.getElementById('typing-indicator'); if(old) old.remove();
+    const d = document.createElement('div');
+    d.className='msg'; d.id='typing-indicator';
+    d.innerHTML =
+      '<div class="msg-avatar ai">🤖</div>'+
+      '<div class="msg-bubble ai" style="min-width:200px;">'+
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">⏳ Rate limit hit — auto-retrying in <strong><span id="retry-countdown">'+seconds+'</span>s</strong></div>'+
+        '<div style="font-size:11px;color:var(--text3);">Attempt '+attemptNum+' of '+maxAttempts+'</div>'+
+        '<div style="height:4px;background:#E0E0F0;border-radius:2px;margin-top:8px;overflow:hidden;">'+
+          '<div id="retry-bar" style="height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:100%;border-radius:2px;transition:width '+seconds+'s linear;"></div>'+
+        '</div>'+
+      '</div>';
+    c.appendChild(d);
+    scrollTutorBottom();
+    // Animate bar shrinking
+    setTimeout(()=>{ const bar=document.getElementById('retry-bar'); if(bar) bar.style.width='0%'; },50);
+    // Tick countdown
+    let remaining = seconds;
+    const tick = setInterval(()=>{
+      remaining--;
+      const el = document.getElementById('retry-countdown');
+      if(el) el.textContent = remaining;
+      if(remaining <= 0){ clearInterval(tick); setTimeout(resolve, 200); }
+    }, 1000);
+  });
 }
 
 function clearChat(){
