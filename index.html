@@ -653,7 +653,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   <nav class="topnav">
     <div class="logo"><span class="logo-star">🤖</span> AI Math Tutor</div>
     <div class="nav-right">
-      <button class="nav-btn" onclick="clearChat()" title="Clear conversation">🗑 Clear</button>
+      <button class="nav-btn" onclick="toggleApiKeyBanner()" id="tutor-settings-btn" title="API Key Settings" style="display:none;">⚙️ Key</button>
+      <button class="nav-btn" onclick="clearChat()">🗑 Clear</button>
       <button class="nav-btn" onclick="showScreen('screen-home')">🏠 Home</button>
       <div class="avatar" id="tutor-avatar" style="display:none">A</div>
     </div>
@@ -661,7 +662,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 
   <div class="tutor-body" id="tutor-body">
     <!-- API key banner -->
-    <div class="api-key-banner" id="api-key-banner">
+    <div class="api-key-banner" id="api-key-banner" style="display:none;">
       <div class="ak-icon">🔑</div>
       <div style="flex:1;">
         <strong>Get your FREE OpenRouter API Key — works instantly, no credit card!</strong><br>
@@ -1459,16 +1460,35 @@ function saveApiKey(){
   tutorApiKey = val;
   localStorage.setItem('mathstar_or_key', val);
   document.getElementById('api-key-banner').style.display = 'none';
-  appendAIWelcome();
+  const settingsBtn = document.getElementById('tutor-settings-btn');
+  if(settingsBtn) settingsBtn.style.display='flex';
+  if(chatHistory.length === 0) appendAIWelcome();
 }
 
 function initTutorScreen(){
   const av = document.getElementById('tutor-avatar');
   if(currentUser && av){ av.style.display='flex'; av.textContent=currentUser.name[0]; }
   const banner = document.getElementById('api-key-banner');
-  if(tutorApiKey && banner){ banner.style.display='none'; }
-  if(chatHistory.length === 0 && tutorApiKey){ appendAIWelcome(); }
+  const settingsBtn = document.getElementById('tutor-settings-btn');
+  if(tutorApiKey){
+    // Key already saved — hide banner, show subtle settings button
+    if(banner) banner.style.display='none';
+    if(settingsBtn) settingsBtn.style.display='flex';
+    if(chatHistory.length === 0) appendAIWelcome();
+  } else {
+    // No key yet — show the banner so user can enter it
+    if(banner) banner.style.display='flex';
+    if(settingsBtn) settingsBtn.style.display='none';
+  }
   updateQuickChips();
+}
+
+function toggleApiKeyBanner(){
+  const banner = document.getElementById('api-key-banner');
+  if(!banner) return;
+  const isVisible = banner.style.display !== 'none';
+  banner.style.display = isVisible ? 'none' : 'flex';
+  if(!isVisible) banner.scrollIntoView({behavior:'smooth'});
 }
 
 function appendAIWelcome(){
